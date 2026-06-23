@@ -1,0 +1,4 @@
+[17-Jun-2024 08:42:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/insogfqh/public_html/wp-content/themes/blockter/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/insogfqh/public_html/wp-content/themes/blockter/index.php on line 13

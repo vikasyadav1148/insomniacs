@@ -1,0 +1,1939 @@
+# Copyright (C) 2020 blockter
+# This file is distributed under the same license as the blockter package.
+msgid ""
+msgstr ""
+"Project-Id-Version: blockter\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: blockter/404.php:13, blockter/header.php:33
+msgid "logo image"
+msgstr ""
+
+#: blockter/404.php:16
+msgid "error image"
+msgstr ""
+
+#: blockter/404.php:17
+msgid "Page not found"
+msgstr ""
+
+#: blockter/404.php:19
+msgid "GO HOME"
+msgstr ""
+
+#: blockter/comments.php:31, blockter/comments.php:43, blockter/framework-customizations/extensions/feedback/views/reviews.php:32, blockter/framework-customizations/extensions/feedback/views/reviews.php:53
+msgid "Comment navigation"
+msgstr ""
+
+#: blockter/comments.php:32, blockter/comments.php:44
+msgid " Older Comments"
+msgstr ""
+
+#: blockter/comments.php:33, blockter/comments.php:45
+msgid "Newer Comments "
+msgstr ""
+
+#: blockter/comments.php:72
+msgid "Leave a comment"
+msgstr ""
+
+#: blockter/comments.php:74
+msgid "Your Comments"
+msgstr ""
+
+#: blockter/comments.php:76
+msgid "submit"
+msgstr ""
+
+#: blockter/comments.php:51, blockter/framework-customizations/extensions/feedback/views/reviews.php:62
+msgid "Comments are closed."
+msgstr ""
+
+#: blockter/content-aside.php:40, blockter/content-image.php:41, blockter/inc/helpers.php:550, blockter/vc_templates/news.php:94
+msgid "STICKY"
+msgstr ""
+
+#: blockter/content-aside.php:76, blockter/content-audio.php:101, blockter/content-gallery.php:57, blockter/content-image.php:74, blockter/content-link.php:57, blockter/content-page.php:11, blockter/content-quote.php:107, blockter/content-video.php:61, blockter/content.php:74, blockter/image.php:50
+msgid "Pages:"
+msgstr ""
+
+#: blockter/content-celebrity-grid.php:6, blockter/content-celebrity-list.php:7, blockter/inc/helpers.php:1487, blockter/inc/helpers.php:1544, blockter/template-parts/my-account/favorite-movies.php:57, blockter/template-parts/my-account/favorite-shows.php:55, blockter/template-parts/my-account/my-movies.php:48, blockter/template-parts/my-account/my-shows.php:44
+msgid "Sort By:"
+msgstr ""
+
+#: blockter/content-featured-post.php:24
+msgctxt "Used between list items, there is a space after the comma."
+msgid ", "
+msgstr ""
+
+#: blockter/content-gallery.php:16
+msgid "Blog image"
+msgstr ""
+
+#: blockter/content-link.php:18
+msgid "Link Button"
+msgstr ""
+
+#: blockter/content-none.php:8
+msgid "Nothing Found"
+msgstr ""
+
+#: blockter/content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+#: blockter/content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: blockter/content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: blockter/footer.php:23
+msgid "Back to top"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/extensions/feedback-stars/views/listing-review-html5.php:34
+msgctxt "1: date, 2: time"
+msgid "- %1$s at %2$s"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/extensions/feedback-stars/views/listing-review-html5.php:55
+msgid "+ Edit"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/views/reviews.php:25
+msgid "Comment (1)"
+msgid_plural "Comments (%1$s)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/framework-customizations/extensions/feedback/views/reviews.php:35, blockter/framework-customizations/extensions/feedback/views/reviews.php:56
+msgid "&larr; Older Comments"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/views/reviews.php:36, blockter/framework-customizations/extensions/feedback/views/reviews.php:57
+msgid "Newer Comments &rarr;"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/views/reviews.php:70
+msgid "Leave a Review"
+msgstr ""
+
+#: blockter/framework-customizations/extensions/feedback/views/reviews.php:72
+msgid "Post Review"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/customizer.php:7, blockter/inc/customizer.php:722
+msgid "Header Layout"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/customizer.php:14, blockter/framework-customizations/theme/options/posts/page.php:20, blockter/inc/customizer.php:727
+msgid "Layout 1"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/customizer.php:20, blockter/framework-customizations/theme/options/posts/page.php:21, blockter/inc/customizer.php:728
+msgid "Layout 2"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/customizer.php:26, blockter/framework-customizations/theme/options/posts/page.php:22, blockter/inc/customizer.php:729
+msgid "Layout 3"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:6
+msgid "Header"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:16, blockter/framework-customizations/theme/options/posts/page.php:162
+msgid "Layout"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:19, blockter/framework-customizations/theme/options/posts/page.php:67, blockter/framework-customizations/theme/options/posts/page.php:93, blockter/framework-customizations/theme/options/posts/page.php:165, blockter/framework-customizations/theme/options/posts/page.php:175
+msgid "Default"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:31
+msgid "Menu background"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:32, blockter/framework-customizations/theme/options/posts/page.php:38, blockter/framework-customizations/theme/options/posts/page.php:44, blockter/framework-customizations/theme/options/posts/page.php:50
+msgid "Choose color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:37
+msgid "Heading menu text color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:43
+msgid "Button background"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:49
+msgid "Button text color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:64
+msgid "Logo"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:68, blockter/framework-customizations/theme/options/posts/page.php:94
+msgid "Custom"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:76, blockter/framework-customizations/theme/options/posts/post.php:67, blockter/framework-customizations/theme/options/posts/post.php:126, blockter/framework-customizations/theme/options/posts/post.php:148
+msgid "Choose image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:90
+msgid "Breadcrumbs"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:95, blockter/framework-customizations/theme/options/posts/page.php:167, blockter/framework-customizations/theme/options/posts/page.php:176
+msgid "Disable"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:103, blockter/inc/customizer.php:493, blockter/inc/customizer.php:591, blockter/inc/customizer.php:673, blockter/inc/customizer.php:808, blockter/inc/vc-include.php:297
+msgid "Text color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:104
+msgid "Display text color of page breadcumbs"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:109, blockter/framework-customizations/theme/options/posts/post.php:32
+msgid "Alternative Title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:110
+msgid "This will replace heading page title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:115
+msgid "Text Header"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:116, blockter/inc/customizer.php:881, blockter/inc/customizer.php:1001
+msgid "This will display under breadcrumbs (optional)"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:125
+msgid "Background Style"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:126, blockter/inc/customizer.php:899, blockter/inc/customizer.php:1026
+msgid "If select background image option, the theme recommends a header size of at least 1170 width pixels"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:129, blockter/inc/customizer.php:904, blockter/inc/customizer.php:1030
+msgid "Use Image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:130, blockter/inc/customizer.php:905, blockter/inc/customizer.php:1031
+msgid "Use Solid Color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:138
+msgid "Single Upload (Images Only)"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:144, blockter/inc/vc-include.php:148, blockter/inc/vc-maps.php:1800
+msgid "Background Color"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:158, blockter/inc/customizer.php:31
+msgid "Footer"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:166
+msgid "Enable"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:172, blockter/inc/customizer.php:1100
+msgid "Copyright"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/page.php:185
+msgid "Page Customizing"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:16
+msgid "Custom Page Title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:19, blockter/framework-customizations/theme/options/posts/post.php:49, blockter/inc/customizer.php:794
+msgid "No"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:23, blockter/framework-customizations/theme/options/posts/post.php:53, blockter/inc/customizer.php:793
+msgid "Yes"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:33
+msgid "This will replace heading post title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:37
+msgid "Custom Text Header"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:38
+msgid "White some text (optional)"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:46
+msgid "Set Featured Image as Post Background Image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:62
+msgid "Image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:66, blockter/framework-customizations/theme/options/posts/post.php:77
+msgid "Image upload"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:73
+msgid "Gallery"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:78
+msgid "Choose image(s)"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:84, blockter/inc/vc-maps.php:12
+msgid "Video"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:88
+msgid "Video type"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:89
+msgid "Support Youtube and Vimeo"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:92
+msgid "Youtube"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:93
+msgid "Vimeo"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:98
+msgid "Video url"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:106, blockter/framework-customizations/theme/options/posts/post.php:120
+msgid "Link"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:110, blockter/inc/vc-maps.php:410, blockter/inc/vc-maps.php:1704, blockter/inc/vc-maps.php:1863, blockter/inc/vc-maps.php:2106, blockter/inc/vc-maps.php:2148
+msgid "Title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:111, blockter/inc/vc-maps.php:411, blockter/inc/vc-maps.php:2107, blockter/inc/vc-maps.php:2149
+msgid "Enter your title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:115, blockter/inc/vc-include.php:273
+msgid "Icon"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:116
+msgid "Choose icon"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:121
+msgid "Enter your url here"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:125
+msgid "Background image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:132, blockter/framework-customizations/theme/options/posts/post.php:136, blockter/taxonomy-post_format.php:35
+msgid "Audio"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:137
+msgid "Enter audio url"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:143, blockter/framework-customizations/theme/options/posts/post.php:157
+msgid "Quote"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:147
+msgid "Quote background image"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:152
+msgid "Sub title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:153
+msgid "Enter your subtitle here"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:158
+msgid "Enter your quote here"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:162
+msgid "Author"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:163
+msgid "Enter your author here"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:173
+msgid "Sub Title"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/posts/post.php:186
+msgid "Post Customizing"
+msgstr ""
+
+#: blockter/framework-customizations/theme/options/taxonomies/mv_collection.php:9, blockter/framework-customizations/theme/options/taxonomies/mv_genre.php:9
+msgid "Background Image"
+msgstr ""
+
+#: blockter/header.php:43
+msgid "login"
+msgstr ""
+
+#: blockter/header.php:46
+msgid "Sign Up"
+msgstr ""
+
+#: blockter/image.php:30, blockter/inc/helpers.php:578, blockter/inc/helpers.php:601, blockter/page-templates/contributors.php:31
+msgid "Edit"
+msgstr ""
+
+#: blockter/image.php:61
+msgid "Previous Image"
+msgstr ""
+
+#: blockter/image.php:62
+msgid "Next Image"
+msgstr ""
+
+#: blockter/inc/customizer.php:10
+msgid "General"
+msgstr ""
+
+#: blockter/inc/customizer.php:17
+msgid "Page Breadcrumbs"
+msgstr ""
+
+#: blockter/inc/customizer.php:24
+msgid "Blog"
+msgstr ""
+
+#: blockter/inc/customizer.php:38
+msgid "Colors"
+msgstr ""
+
+#: blockter/inc/customizer.php:45
+msgid "Typography"
+msgstr ""
+
+#: blockter/inc/customizer.php:54
+msgid "Primary color"
+msgstr ""
+
+#: blockter/inc/customizer.php:126
+msgid "Secondary color"
+msgstr ""
+
+#: blockter/inc/customizer.php:166
+msgid "Tertiary color"
+msgstr ""
+
+#: blockter/inc/customizer.php:215, blockter/inc/customizer.php:234
+msgid "Sub Heading color"
+msgstr ""
+
+#: blockter/inc/customizer.php:251
+msgid "Button color"
+msgstr ""
+
+#: blockter/inc/customizer.php:287
+msgid "Body font"
+msgstr ""
+
+#: blockter/inc/customizer.php:317
+msgid "Heading font"
+msgstr ""
+
+#: blockter/inc/customizer.php:354
+msgid "H1"
+msgstr ""
+
+#: blockter/inc/customizer.php:370
+msgid "H2"
+msgstr ""
+
+#: blockter/inc/customizer.php:386
+msgid "H3"
+msgstr ""
+
+#: blockter/inc/customizer.php:402
+msgid "H4"
+msgstr ""
+
+#: blockter/inc/customizer.php:418
+msgid "H5"
+msgstr ""
+
+#: blockter/inc/customizer.php:434
+msgid "H6"
+msgstr ""
+
+#: blockter/inc/customizer.php:454, blockter/inc/customizer.php:557, blockter/inc/customizer.php:640
+msgid "Header Background"
+msgstr ""
+
+#: blockter/inc/customizer.php:467, blockter/inc/customizer.php:564, blockter/inc/customizer.php:647, blockter/inc/customizer.php:898, blockter/inc/customizer.php:1025
+msgid "Background"
+msgstr ""
+
+#: blockter/inc/customizer.php:486, blockter/inc/customizer.php:584, blockter/inc/customizer.php:666
+msgid "Menu"
+msgstr ""
+
+#: blockter/inc/customizer.php:513, blockter/inc/customizer.php:610, blockter/inc/customizer.php:692
+msgid "Text highlight color"
+msgstr ""
+
+#: blockter/inc/customizer.php:543
+msgid "Turn on Search Movie Ajax?"
+msgstr ""
+
+#: blockter/inc/customizer.php:547, blockter/inc/customizer.php:752, blockter/inc/customizer.php:863, blockter/inc/customizer.php:1016
+msgid "On"
+msgstr ""
+
+#: blockter/inc/customizer.php:548, blockter/inc/customizer.php:751, blockter/inc/customizer.php:864, blockter/inc/customizer.php:1017
+msgid "Off"
+msgstr ""
+
+#: blockter/inc/customizer.php:725
+msgid "Choose Header Preset Select your main header preset here to apply for all pages"
+msgstr ""
+
+#: blockter/inc/customizer.php:737, blockter/inc/helpers.php:337, blockter/inc/helpers.php:322
+msgid "Logo image"
+msgstr ""
+
+#: blockter/inc/customizer.php:738
+msgid "Select logo image your website"
+msgstr ""
+
+#: blockter/inc/customizer.php:746
+msgid "Loading effect"
+msgstr ""
+
+#: blockter/inc/customizer.php:749
+msgid "This option shows animated page loader"
+msgstr ""
+
+#: blockter/inc/customizer.php:760
+msgid "Movies/TV Shows List per page"
+msgstr ""
+
+#: blockter/inc/customizer.php:772
+msgid "Movies/TV Shows Grid per page"
+msgstr ""
+
+#: blockter/inc/customizer.php:787
+msgid "Display"
+msgstr ""
+
+#: blockter/inc/customizer.php:833
+msgid "Text align"
+msgstr ""
+
+#: blockter/inc/customizer.php:840
+msgid "Default: Center"
+msgstr ""
+
+#: blockter/inc/customizer.php:841
+msgid "Left"
+msgstr ""
+
+#: blockter/inc/customizer.php:842
+msgid "Right"
+msgstr ""
+
+#: blockter/inc/customizer.php:859
+msgid "Navigation bar"
+msgstr ""
+
+#: blockter/inc/customizer.php:880, blockter/inc/customizer.php:1000
+msgid "Header description"
+msgstr ""
+
+#: blockter/inc/customizer.php:919, blockter/inc/customizer.php:1045
+msgid "Upload Image"
+msgstr ""
+
+#: blockter/inc/customizer.php:923, blockter/inc/customizer.php:1047
+msgid "Upload background image of page header here!"
+msgstr ""
+
+#: blockter/inc/customizer.php:949, blockter/inc/customizer.php:1072
+msgid "Select Color"
+msgstr ""
+
+#: blockter/inc/customizer.php:981
+msgid "This option only for Posts page"
+msgstr ""
+
+#: blockter/inc/customizer.php:990
+msgid "Header Title"
+msgstr ""
+
+#: blockter/inc/customizer.php:991
+msgid "My Blog!"
+msgstr ""
+
+#: blockter/inc/customizer.php:1002
+msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur suscipit nulla ligula, nec tincid unt tortor pulvinar a. Proin nunc leo, imperdiet nec risus non."
+msgstr ""
+
+#: blockter/inc/customizer.php:1011
+msgid "Footer widget"
+msgstr ""
+
+#: blockter/inc/customizer.php:1108
+msgid "Background color"
+msgstr ""
+
+#: blockter/inc/helpers.php:132
+msgid "%d Article"
+msgid_plural "%d Articles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/inc/helpers.php:190
+msgid "<"
+msgstr ""
+
+#: blockter/inc/helpers.php:191
+msgid ">"
+msgstr ""
+
+#: blockter/inc/helpers.php:198
+msgid "Posts navigation"
+msgstr ""
+
+#: blockter/inc/helpers.php:236
+msgid "Post navigation"
+msgstr ""
+
+#: blockter/inc/helpers.php:245
+msgid "<span class=\"meta-nav\">Previous Post</span>%title"
+msgstr ""
+
+#: blockter/inc/helpers.php:246
+msgid "<span class=\"meta-nav\">Next Post</span>%title"
+msgstr ""
+
+#: blockter/inc/helpers.php:242
+msgid "<span class=\"meta-nav\">Published In</span>%title"
+msgstr ""
+
+#: blockter/inc/helpers.php:279, blockter/inc/helpers.php:595
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: blockter/inc/helpers.php:284
+msgid "<cite class=\"fn\">%s</cite>"
+msgstr ""
+
+#: blockter/inc/helpers.php:287
+msgid "%1$s"
+msgstr ""
+
+#: blockter/inc/helpers.php:288
+msgid "(Edit)"
+msgstr ""
+
+#: blockter/inc/helpers.php:418
+msgid "Primary Menu Right"
+msgstr ""
+
+#: blockter/inc/helpers.php:430
+msgid "View all posts in %s"
+msgstr ""
+
+#: blockter/inc/helpers.php:517, blockter/inc/helpers.php:531, blockter/inc/helpers.php:502
+msgid "Post nav thumb"
+msgstr ""
+
+#: blockter/inc/helpers.php:522, blockter/inc/helpers.php:507
+msgid "Previous"
+msgstr ""
+
+#: blockter/inc/helpers.php:536, blockter/inc/helpers.php:862
+msgid "Next"
+msgstr ""
+
+#: blockter/inc/helpers.php:578
+msgid "Pingback:"
+msgstr ""
+
+#: blockter/inc/helpers.php:678
+msgid "Search for:"
+msgstr ""
+
+#: blockter/inc/helpers.php:679
+msgid "Enter Keyword"
+msgstr ""
+
+#: blockter/inc/helpers.php:694
+msgid "ago"
+msgstr ""
+
+#: blockter/inc/helpers.php:796, blockter/vc_templates/movie_tab.php:114, blockter/vc_templates/show_tab.php:114
+msgid "Read More"
+msgstr ""
+
+#: blockter/inc/helpers.php:813, blockter/inc/helpers.php:1629, blockter/inc/helpers.php:1726, blockter/template-parts/my-account/favorite-movies.php:132, blockter/template-parts/my-account/favorite-shows.php:129, blockter/template-parts/my-account/my-movies.php:122, blockter/template-parts/my-account/my-shows.php:118, blockter/vc_templates/movie_slider.php:155, blockter/vc_templates/movie_slider.php:75, blockter/vc_templates/movie_tab.php:138, blockter/vc_templates/movie_tab_bymovie.php:238, blockter/vc_templates/movie_tab_bymovie.php:155, blockter/vc_templates/movie_tab_fw.php:240, blockter/vc_templates/movie_tab_fw.php:136, blockter/vc_templates/show_slider.php:144, blockter/vc_templates/show_slider.php:64, blockter/vc_templates/show_tab.php:138, blockter/vc_templates/tv_show_tab_by_tv_show.php:237, blockter/vc_templates/tv_show_tab_by_tv_show.php:154
+msgid "/"
+msgstr ""
+
+#: blockter/inc/helpers.php:861
+msgid "Prev"
+msgstr ""
+
+#: blockter/inc/helpers.php:878
+msgid "&laquo;"
+msgstr ""
+
+#: blockter/inc/helpers.php:879
+msgid "&raquo;"
+msgstr ""
+
+#: blockter/inc/helpers.php:880
+msgid "First"
+msgstr ""
+
+#: blockter/inc/helpers.php:881
+msgid "Last"
+msgstr ""
+
+#: blockter/inc/helpers.php:882
+msgid "Older Entries"
+msgstr ""
+
+#: blockter/inc/helpers.php:883
+msgid "Newer Entries"
+msgstr ""
+
+#: blockter/inc/helpers.php:1007
+msgid "Page %s of %s:"
+msgstr ""
+
+#: blockter/inc/helpers.php:1225, blockter/template-parts/my-account/navigation.php:9
+msgid "Log In"
+msgstr ""
+
+#: blockter/inc/helpers.php:1223, blockter/template-parts/my-account/navigation.php:5
+msgid "Log Out"
+msgstr ""
+
+#: blockter/inc/helpers.php:1239
+msgid "Site Admin"
+msgstr ""
+
+#: blockter/inc/helpers.php:1235
+msgid "Register"
+msgstr ""
+
+#: blockter/inc/helpers.php:1268, blockter/inc/helpers.php:1314, blockter/inc/helpers.php:1298
+msgid "Movie"
+msgstr ""
+
+#: blockter/inc/helpers.php:1269, blockter/inc/helpers.php:1315, blockter/inc/helpers.php:1302
+msgid "TV Show"
+msgstr ""
+
+#: blockter/inc/helpers.php:1270, blockter/inc/helpers.php:1316, blockter/inc/helpers.php:1306
+msgid "Cast"
+msgstr ""
+
+#: blockter/inc/helpers.php:1271, blockter/inc/helpers.php:1317, blockter/inc/helpers.php:1310
+msgid "News"
+msgstr ""
+
+#: blockter/inc/helpers.php:1284
+msgid "Search for movies, shows..."
+msgstr ""
+
+#: blockter/inc/helpers.php:1330
+msgid "Search for Movie / TV Show"
+msgstr ""
+
+#: blockter/inc/helpers.php:1482
+msgid "Found %d movie in total"
+msgid_plural "Found %d movies in total"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/inc/helpers.php:1539
+msgid "Found %d show in total"
+msgid_plural "Found %d shows in total"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/inc/helpers.php:1609, blockter/inc/helpers.php:1707, blockter/template-parts/my-account/favorite-movies.php:116, blockter/template-parts/my-account/favorite-shows.php:113, blockter/template-parts/my-account/my-movies.php:106, blockter/template-parts/my-account/my-shows.php:102, blockter/vc_templates/movie_slider.php:48, blockter/vc_templates/movie_tab_bymovie.php:221, blockter/vc_templates/movie_tab_bymovie.php:138, blockter/vc_templates/movie_tab_fw.php:223, blockter/vc_templates/movie_tab_fw.php:119, blockter/vc_templates/show_slider.php:37, blockter/vc_templates/tv_show_tab_by_tv_show.php:220, blockter/vc_templates/tv_show_tab_by_tv_show.php:137
+msgid "Read more"
+msgstr ""
+
+#: blockter/inc/helpers.php:1645, blockter/template-parts/my-account/favorite-movies.php:151, blockter/template-parts/my-account/my-movies.php:141
+msgid "Run time: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1648, blockter/inc/helpers.php:1745, blockter/template-parts/my-account/favorite-movies.php:154, blockter/template-parts/my-account/favorite-shows.php:149, blockter/template-parts/my-account/my-movies.php:144, blockter/template-parts/my-account/my-shows.php:138
+msgid "Tagline: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1651, blockter/template-parts/my-account/favorite-movies.php:157, blockter/template-parts/my-account/my-movies.php:147
+msgid "Release: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1655, blockter/template-parts/my-account/favorite-movies.php:162, blockter/template-parts/my-account/my-movies.php:152
+msgid "Director: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1659, blockter/inc/helpers.php:1756, blockter/template-parts/my-account/favorite-movies.php:168, blockter/template-parts/my-account/favorite-shows.php:160, blockter/template-parts/my-account/my-movies.php:158, blockter/template-parts/my-account/my-shows.php:149
+msgid "Stars: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1742, blockter/template-parts/my-account/favorite-shows.php:146, blockter/template-parts/my-account/my-shows.php:135
+msgid "Episode Runtime: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1748, blockter/template-parts/my-account/favorite-shows.php:152, blockter/template-parts/my-account/my-shows.php:141
+msgid "First Air Date: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1752, blockter/template-parts/my-account/favorite-shows.php:156, blockter/template-parts/my-account/my-shows.php:145
+msgid "Creators: "
+msgstr ""
+
+#: blockter/inc/helpers.php:1782
+msgid "Movies per page: %d movies"
+msgstr ""
+
+#: blockter/inc/helpers.php:1786
+msgid "Page %1$d of %2$d:"
+msgstr ""
+
+#: blockter/inc/helpers.php:1909
+msgid "Actor Avatar"
+msgstr ""
+
+#: blockter/inc/hooks.php:211
+msgid "Page %s"
+msgstr ""
+
+#: blockter/inc/hooks.php:258
+msgid "Blog Widget Area"
+msgstr ""
+
+#: blockter/inc/hooks.php:260
+msgid "Appears in the blog sidebar section of the site."
+msgstr ""
+
+#: blockter/inc/hooks.php:270
+msgid "Celebrity sidebar"
+msgstr ""
+
+#: blockter/inc/hooks.php:271
+msgid "The celebrity sidebar."
+msgstr ""
+
+#: blockter/inc/hooks.php:280
+msgid "Movie sidebar"
+msgstr ""
+
+#: blockter/inc/hooks.php:281
+msgid "The movie sidebar."
+msgstr ""
+
+#: blockter/inc/hooks.php:326
+msgid "Blockter Demo"
+msgstr ""
+
+#: blockter/inc/hooks.php:396
+msgid "Please specify the amount of money you want to donate for this cause. You can choose one of these options below:"
+msgstr ""
+
+#: blockter/inc/include-kirki.php:43
+msgid "The Kirki Toolkit plugin is installed but not activated. Please activate it in order to take full advantage of the theme is options."
+msgstr ""
+
+#: blockter/inc/include-kirki.php:60
+msgid "If you want to take full advantage of the options this theme has to offer, please install the companion Kirki Toolkit plugin."
+msgstr ""
+
+#: blockter/inc/menus.php:8
+msgid "Top primary menu"
+msgstr ""
+
+#: blockter/inc/menus.php:9
+msgid "Secondary menu in left sidebar"
+msgstr ""
+
+#: blockter/inc/modify.php:3, blockter/inc/vc-maps.php:235
+msgid "Blog News"
+msgstr ""
+
+#: blockter/inc/modify.php:4, blockter/inc/vc-maps.php:236
+msgid "Add a Blog News"
+msgstr ""
+
+#: blockter/inc/modify.php:7
+msgid "Health Guide Theme"
+msgstr ""
+
+#: blockter/inc/modify.php:12, blockter/inc/vc-include.php:112, blockter/inc/vc-include.php:258, blockter/inc/vc-include.php:318, blockter/inc/vc-maps.php:243, blockter/inc/vc-maps.php:485, blockter/inc/vc-maps.php:1488, blockter/inc/vc-maps.php:1624, blockter/inc/vc-maps.php:1692
+msgid "Style"
+msgstr ""
+
+#: blockter/inc/modify.php:27, blockter/inc/vc-maps.php:256, blockter/inc/vc-maps.php:496, blockter/inc/vc-maps.php:1155, blockter/inc/vc-maps.php:1279, blockter/inc/vc-maps.php:1322, blockter/inc/vc-maps.php:1445, blockter/inc/vc-maps.php:1548, blockter/inc/vc-maps.php:1650
+msgid "Count"
+msgstr ""
+
+#: blockter/inc/modify.php:28, blockter/inc/vc-maps.php:257, blockter/inc/vc-maps.php:497, blockter/inc/vc-maps.php:1156, blockter/inc/vc-maps.php:1280, blockter/inc/vc-maps.php:1323, blockter/inc/vc-maps.php:1446
+msgid "Enter post count"
+msgstr ""
+
+#: blockter/inc/modify.php:35, blockter/inc/vc-maps.php:264
+msgid "Ignore sticky posts?"
+msgstr ""
+
+#: blockter/inc/modify.php:43, blockter/inc/vc-maps.php:272
+msgid "Display Thumbnail Image?"
+msgstr ""
+
+#: blockter/inc/modify.php:52, blockter/inc/vc-maps.php:281, blockter/inc/vc-maps.php:1221, blockter/inc/vc-maps.php:1388, blockter/inc/vc-maps.php:1567
+msgid "Order by"
+msgstr ""
+
+#: blockter/inc/modify.php:71, blockter/inc/vc-maps.php:300, blockter/inc/vc-maps.php:1241, blockter/inc/vc-maps.php:1408, blockter/inc/vc-maps.php:1587
+msgid "Sort order"
+msgstr ""
+
+#: blockter/inc/modify.php:84
+msgid "Posts Per Row"
+msgstr ""
+
+#: blockter/inc/modify.php:92, blockter/inc/vc-maps.php:42, blockter/inc/vc-maps.php:220, blockter/inc/vc-maps.php:324, blockter/inc/vc-maps.php:462, blockter/inc/vc-maps.php:506, blockter/inc/vc-maps.php:637, blockter/inc/vc-maps.php:728, blockter/inc/vc-maps.php:836, blockter/inc/vc-maps.php:925, blockter/inc/vc-maps.php:1016, blockter/inc/vc-maps.php:1073, blockter/inc/vc-maps.php:1132, blockter/inc/vc-maps.php:1256, blockter/inc/vc-maps.php:1299, blockter/inc/vc-maps.php:1422, blockter/inc/vc-maps.php:1465, blockter/inc/vc-maps.php:1601, blockter/inc/vc-maps.php:1670, blockter/inc/vc-maps.php:1720, blockter/inc/vc-maps.php:1825, blockter/inc/vc-maps.php:1896, blockter/inc/vc-maps.php:1926, blockter/inc/vc-maps.php:1996, blockter/inc/vc-maps.php:2082
+msgid "Class"
+msgstr ""
+
+#: blockter/inc/modify.php:93, blockter/inc/vc-maps.php:43, blockter/inc/vc-maps.php:221, blockter/inc/vc-maps.php:325, blockter/inc/vc-maps.php:463, blockter/inc/vc-maps.php:507, blockter/inc/vc-maps.php:638, blockter/inc/vc-maps.php:729, blockter/inc/vc-maps.php:837, blockter/inc/vc-maps.php:926, blockter/inc/vc-maps.php:1017, blockter/inc/vc-maps.php:1074, blockter/inc/vc-maps.php:1133, blockter/inc/vc-maps.php:1257, blockter/inc/vc-maps.php:1300, blockter/inc/vc-maps.php:1423, blockter/inc/vc-maps.php:1466, blockter/inc/vc-maps.php:1602, blockter/inc/vc-maps.php:1671, blockter/inc/vc-maps.php:1721, blockter/inc/vc-maps.php:1826, blockter/inc/vc-maps.php:1897, blockter/inc/vc-maps.php:1927, blockter/inc/vc-maps.php:1997, blockter/inc/vc-maps.php:2083
+msgid "Style particular content element differently - add a class name and refer to it in custom CSS."
+msgstr ""
+
+#: blockter/inc/modify.php:99, blockter/inc/vc-maps.php:49, blockter/inc/vc-maps.php:227, blockter/inc/vc-maps.php:331, blockter/inc/vc-maps.php:469, blockter/inc/vc-maps.php:513, blockter/inc/vc-maps.php:644, blockter/inc/vc-maps.php:735, blockter/inc/vc-maps.php:843, blockter/inc/vc-maps.php:932, blockter/inc/vc-maps.php:1023, blockter/inc/vc-maps.php:1080, blockter/inc/vc-maps.php:1139, blockter/inc/vc-maps.php:1263, blockter/inc/vc-maps.php:1306, blockter/inc/vc-maps.php:1429, blockter/inc/vc-maps.php:1472, blockter/inc/vc-maps.php:1608, blockter/inc/vc-maps.php:1677, blockter/inc/vc-maps.php:1727, blockter/inc/vc-maps.php:1832, blockter/inc/vc-maps.php:1903, blockter/inc/vc-maps.php:1933, blockter/inc/vc-maps.php:2003, blockter/inc/vc-maps.php:2089
+msgid "CSS"
+msgstr ""
+
+#: blockter/inc/modify.php:101, blockter/inc/vc-maps.php:51, blockter/inc/vc-maps.php:229, blockter/inc/vc-maps.php:333, blockter/inc/vc-maps.php:471, blockter/inc/vc-maps.php:515, blockter/inc/vc-maps.php:646, blockter/inc/vc-maps.php:737, blockter/inc/vc-maps.php:845, blockter/inc/vc-maps.php:934, blockter/inc/vc-maps.php:1025, blockter/inc/vc-maps.php:1082, blockter/inc/vc-maps.php:1141, blockter/inc/vc-maps.php:1265, blockter/inc/vc-maps.php:1308, blockter/inc/vc-maps.php:1431, blockter/inc/vc-maps.php:1474, blockter/inc/vc-maps.php:1610, blockter/inc/vc-maps.php:1679, blockter/inc/vc-maps.php:1729, blockter/inc/vc-maps.php:1834, blockter/inc/vc-maps.php:1905, blockter/inc/vc-maps.php:1935, blockter/inc/vc-maps.php:2005, blockter/inc/vc-maps.php:2091
+msgid "Design Options"
+msgstr ""
+
+#: blockter/inc/vc-include.php:113
+msgid "Select button display style."
+msgstr ""
+
+#: blockter/inc/vc-include.php:135, blockter/inc/vc-maps.php:1789
+msgid "Text Color"
+msgstr ""
+
+#: blockter/inc/vc-include.php:160
+msgid "Line Color?"
+msgstr ""
+
+#: blockter/inc/vc-include.php:175
+msgid "Start Color"
+msgstr ""
+
+#: blockter/inc/vc-include.php:187
+msgid "End Color"
+msgstr ""
+
+#: blockter/inc/vc-include.php:199
+msgid "Shape"
+msgstr ""
+
+#: blockter/inc/vc-include.php:200
+msgid "Select button shape."
+msgstr ""
+
+#: blockter/inc/vc-include.php:212, blockter/inc/vc-include.php:282, blockter/inc/vc-include.php:324, blockter/inc/vc-maps.php:1974
+msgid "Color"
+msgstr ""
+
+#: blockter/inc/vc-include.php:214
+msgid "Select button color."
+msgstr ""
+
+#: blockter/inc/vc-include.php:259
+msgid "Select accordion display style."
+msgstr ""
+
+#: blockter/inc/vc-include.php:274
+msgid "Select accordion navigation icon."
+msgstr ""
+
+#: blockter/inc/vc-include.php:283
+msgid "Select accordion color."
+msgstr ""
+
+#: blockter/inc/vc-include.php:298
+msgid "Select text color."
+msgstr ""
+
+#: blockter/inc/vc-include.php:319
+msgid "Select tour display style."
+msgstr ""
+
+#: blockter/inc/vc-include.php:325
+msgid "Select tour color."
+msgstr ""
+
+#: blockter/inc/vc-maps.php:15, blockter/inc/vc-maps.php:91, blockter/inc/vc-maps.php:238, blockter/inc/vc-maps.php:405, blockter/inc/vc-maps.php:480, blockter/inc/vc-maps.php:525, blockter/inc/vc-maps.php:655, blockter/inc/vc-maps.php:746, blockter/inc/vc-maps.php:854, blockter/inc/vc-maps.php:943, blockter/inc/vc-maps.php:1033, blockter/inc/vc-maps.php:1091, blockter/inc/vc-maps.php:1150, blockter/inc/vc-maps.php:1274, blockter/inc/vc-maps.php:1317, blockter/inc/vc-maps.php:1440, blockter/inc/vc-maps.php:1483, blockter/inc/vc-maps.php:1619, blockter/inc/vc-maps.php:1687, blockter/inc/vc-maps.php:1737, blockter/inc/vc-maps.php:1842, blockter/inc/vc-maps.php:1914, blockter/inc/vc-maps.php:1945, blockter/inc/vc-maps.php:2013, blockter/inc/vc-maps.php:2099, blockter/inc/vc-maps.php:2141
+msgid "Blockter Theme"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:20
+msgid "Source"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:32
+msgid "Video ID"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:33
+msgid "Enter video ID, Ex: https://www.youtube.com/watch?v=22iu8byk5C8, ID = 22iu8byk5C8; https://vimeo.com/156602623, ID = 156602623"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:89
+msgid "Case Studies"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:96, blockter/inc/vc-maps.php:313, blockter/inc/vc-maps.php:1164, blockter/inc/vc-maps.php:1288, blockter/inc/vc-maps.php:1331, blockter/inc/vc-maps.php:1454, blockter/inc/vc-maps.php:1557, blockter/inc/vc-maps.php:1659
+msgid "Columns"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:97, blockter/inc/vc-maps.php:314, blockter/inc/vc-maps.php:618, blockter/inc/vc-maps.php:709, blockter/inc/vc-maps.php:816, blockter/inc/vc-maps.php:897, blockter/inc/vc-maps.php:906, blockter/inc/vc-maps.php:997, blockter/inc/vc-maps.php:1064, blockter/inc/vc-maps.php:1122, blockter/inc/vc-maps.php:1165, blockter/inc/vc-maps.php:1289, blockter/inc/vc-maps.php:1332, blockter/inc/vc-maps.php:1455
+msgid "Select post per row"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:106
+msgid "Enable filter"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:117
+msgid "Pick post by"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:130
+msgid "Select category(s)"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:153
+msgid "Enter categories"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:158
+msgid "Select post(s)"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:181
+msgid "Enter posts"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:186
+msgid "Custom hover background?"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:196
+msgid "Color 1"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:207
+msgid "Color 2"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:402
+msgid "Casts"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:403
+msgid "Add a cast"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:419, blockter/inc/vc-maps.php:542, blockter/inc/vc-maps.php:682, blockter/inc/vc-maps.php:751, blockter/inc/vc-maps.php:870, blockter/inc/vc-maps.php:970, blockter/inc/vc-maps.php:1174, blockter/inc/vc-maps.php:1341, blockter/inc/vc-maps.php:1501
+msgid "Narrow data source"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:431
+msgid "Number of celebrities"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:443
+msgid "Enter celebrities"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:477
+msgid "Casts Grid Items"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:478
+msgid "Add a cast grid"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:522
+msgid "Movie Tab"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:523, blockter/inc/vc-maps.php:653, blockter/inc/vc-maps.php:744
+msgid "Add a Movie"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:530, blockter/inc/vc-maps.php:660
+msgid "Movie Tab Style"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:555, blockter/inc/vc-maps.php:764, blockter/inc/vc-maps.php:883, blockter/inc/vc-maps.php:1108, blockter/inc/vc-maps.php:1187, blockter/inc/vc-maps.php:1354, blockter/inc/vc-maps.php:1514, blockter/inc/vc-maps.php:1637
+msgid "Enter genres"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:572, blockter/inc/vc-maps.php:781, blockter/inc/vc-maps.php:1204, blockter/inc/vc-maps.php:1371, blockter/inc/vc-maps.php:1531
+msgid "Enter collection"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:589, blockter/inc/vc-maps.php:798
+msgid "Enter casts"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:607, blockter/inc/vc-maps.php:708, blockter/inc/vc-maps.php:815, blockter/inc/vc-maps.php:996
+msgid "Movie display per tab"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:608
+msgid "Select post per tab"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:617, blockter/inc/vc-maps.php:905
+msgid "Movie display per row"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:626, blockter/inc/vc-maps.php:717, blockter/inc/vc-maps.php:825, blockter/inc/vc-maps.php:914, blockter/inc/vc-maps.php:1005
+msgid "Show #All"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:652
+msgid "Movie Tab selected by movie"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:672, blockter/inc/vc-maps.php:960
+msgid "Show Filter"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:695
+msgid "Enter movies"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:743
+msgid "Movie Tab Full Width"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:851
+msgid "TV Show Tab"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:852, blockter/inc/vc-maps.php:1089
+msgid "Add a tv show"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:859, blockter/inc/vc-maps.php:1038, blockter/inc/vc-maps.php:1096
+msgid "Show Tab Style"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:896, blockter/inc/vc-maps.php:1063, blockter/inc/vc-maps.php:1121
+msgid "Show display per tab"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:940
+msgid "TV Show Tab selected by TV Show"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:941
+msgid "Add a TV Show"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:948
+msgid "TV Show Tab Style"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:983
+msgid "Enter TV Show"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1030
+msgid "TV Show Tab by Collection"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1031
+msgid "Add a tv show by collection"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1050
+msgid "Enter Collection"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1088
+msgid "TV Show Tab FullWidth"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1147
+msgid "Movie Trailer Vertical"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1148, blockter/inc/vc-maps.php:1315
+msgid "Add a Movie Trailer"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1271
+msgid "TV Show Trailer Vertical"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1272
+msgid "Add a Vertical TV Show Trailer"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1314
+msgid "Movie Trailer Horizontal"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1437
+msgid "TV Show Trailer Horizontal"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1438
+msgid "Add a horiozontal TV Show Trailer"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1480
+msgid "Movie Slider"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1481
+msgid "Add a Movie Slider"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1549, blockter/inc/vc-maps.php:1651
+msgid "Enter movie count"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1558, blockter/inc/vc-maps.php:1660
+msgid "Select movie per row"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1616
+msgid "TV Show Slider"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1617
+msgid "Add a TV Show Slider"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1685
+msgid "Brand Logo"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1705
+msgid "Enter Logo Brand title"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1713, blockter/inc/vc-maps.php:1847, blockter/taxonomy-post_format.php:29
+msgid "Images"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1714, blockter/inc/vc-maps.php:1848
+msgid "Choose your images"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1735
+msgid "Tabs"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1741
+msgid "Tabs content"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1773
+msgid "Nav"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1780
+msgid "Custom Nav"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1811
+msgid "Title Content"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1818
+msgid "Content"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1840
+msgid "Landing"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1854
+msgid "Url"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1855
+msgid "Enter your url"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1864
+msgid "Enter the title"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1872
+msgid "Description"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1873
+msgid "Write some text"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1912
+msgid "Twitter Carousel"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1915
+msgid "Add a Carousel of Twiiter"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1943
+msgid "Video Lightbox"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1946
+msgid "Add a Video Lightbox"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1950
+msgid "Video Url"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1952
+msgid "Enter video url here. This options support Vimeo and Youtube. Ex: https://vimeo.com/137213101"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1958
+msgid "Left heading"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1966
+msgid "Right heading"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1981
+msgid "Font Size"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1984
+msgid "Enter font size. Ex: \"30px\", \"1.5rem\" or \"2em\""
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1989
+msgid "Icon play"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:1992
+msgid "Select icon from library."
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2011
+msgid "Countdown Time"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2014
+msgid "Add a Countdown Time"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2019
+msgid "Time"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2022
+msgid "Enter datetime. For example: 10/20/2020 17:30:00"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2031
+msgid "Day text"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2042
+msgid "Hours text"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2053
+msgid "Minute text"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2064
+msgid "Second text"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2075
+msgid "URL"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2077
+msgid "Go to the URL when end countdown (Optional)"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2097
+msgid "Facebook"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2100
+msgid "Add a Facebook"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2115
+msgid "Src of iframe"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2122
+msgid "Height"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2123
+msgid "Enter empty space height (Note: CSS measurement units allowed)."
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2130
+msgid "Width"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2131
+msgid "Enter empty space width (Note: CSS measurement units allowed)."
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2139
+msgid "Twitter"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2142
+msgid "Add a Twitter"
+msgstr ""
+
+#: blockter/inc/vc-maps.php:2157
+msgid "Enter the ID"
+msgstr ""
+
+#: blockter/page-templates/blog-grid.php:3
+msgid "Blog Grid"
+msgstr ""
+
+#: blockter/page-templates/blog-list.php:3
+msgid "Blog List"
+msgstr ""
+
+#: blockter/page-templates/celebrity-grid.php:3
+msgid "Celebrity Grid"
+msgstr ""
+
+#: blockter/page-templates/celebrity-list.php:3
+msgid "Celebrity List"
+msgstr ""
+
+#: blockter/page-templates/coming-soon.php:3
+msgid "Coming Soon Template"
+msgstr ""
+
+#: blockter/page-templates/contributors.php:3
+msgid "Contributor Page"
+msgstr ""
+
+#: blockter/page-templates/full-width.php:3
+msgid "Full Width Page"
+msgstr ""
+
+#: blockter/page-templates/header-layout-1.php:36, blockter/page-templates/header-layout-2.php:36, blockter/page-templates/header-layout-3.php:35
+msgid "Add Menu"
+msgstr ""
+
+#: blockter/page-templates/movie-grid-fw-template.php:3
+msgid "Movie Grid Fullwidth Template"
+msgstr ""
+
+#: blockter/page-templates/movie-grid-template.php:3
+msgid "Movie Grid Template"
+msgstr ""
+
+#: blockter/page-templates/movie-list-template.php:3
+msgid "Movie List Template"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:165
+msgid "404 Page "
+msgstr ""
+
+#: blockter/page-templates/page-header.php:161
+msgid "Tags"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:157
+msgid "Category : "
+msgstr ""
+
+#: blockter/page-templates/page-header.php:144
+msgid "Search results"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:134
+msgid "Movie Single"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:131
+msgid "Event "
+msgstr ""
+
+#: blockter/page-templates/page-header.php:128
+msgid "Shop detail"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:125
+msgid "Shop"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:121
+msgid "Yearly Archives: %s"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:121
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:114
+msgid "Monthly Archives: %s"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:114
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr ""
+
+#: blockter/page-templates/page-header.php:112
+msgid "Daily Archives: %s"
+msgstr ""
+
+#: blockter/page-templates/tv-show-grid.php:3
+msgid "TV Show Grid Template"
+msgstr ""
+
+#: blockter/page-templates/tv-show-list.php:3
+msgid "TV Show List Template"
+msgstr ""
+
+#: blockter/page-templates/user-profile.php:3
+msgid "My Account page"
+msgstr ""
+
+#: blockter/page-templates/user-profile.php:20
+msgid "You must be logged in to edit your profile."
+msgstr ""
+
+#: blockter/search-cast.php:92, blockter/search.php:47
+msgid "Search results for: %s"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:47
+msgid "Archives"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:44
+msgid "Galleries"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:41
+msgid "Links"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:38
+msgid "Quotes"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:32
+msgid "Videos"
+msgstr ""
+
+#: blockter/taxonomy-post_format.php:26
+msgid "Asides"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:15
+msgid "The old password does not match"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:13
+msgid "The passwords you entered do not match.  Your password was not updated."
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:24
+msgid "Change password for"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:28
+msgid "Old Password *"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:32
+msgid "Password *"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:36
+msgid "Repeat Password *"
+msgstr ""
+
+#: blockter/template-parts/my-account/change-password.php:40, blockter/template-parts/my-account/user-profile.php:112
+msgid "Update"
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:220
+msgid "You do not have any favourite movies."
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:50, blockter/template-parts/my-account/favorite-shows.php:48, blockter/template-parts/my-account/my-movies.php:41, blockter/template-parts/my-account/my-shows.php:37
+msgctxt "with first and last result"
+msgid "Showing the single result"
+msgid_plural "Found <strong>%3$d shows</strong> in total"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:47, blockter/template-parts/my-account/favorite-shows.php:45, blockter/template-parts/my-account/my-movies.php:38, blockter/template-parts/my-account/my-shows.php:34
+msgid "Showing the single result"
+msgid_plural "Showing all %d shows"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:188, blockter/template-parts/my-account/my-movies.php:178
+msgid "Movie per page: %d movies"
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:197, blockter/template-parts/my-account/favorite-shows.php:190, blockter/template-parts/my-account/my-movies.php:187, blockter/template-parts/my-account/my-shows.php:178
+msgid "Page"
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:199, blockter/template-parts/my-account/favorite-shows.php:192, blockter/template-parts/my-account/my-movies.php:189, blockter/template-parts/my-account/my-shows.php:180
+msgid "of"
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-movies.php:201, blockter/template-parts/my-account/favorite-shows.php:194, blockter/template-parts/my-account/my-movies.php:191, blockter/template-parts/my-account/my-shows.php:182
+msgid ":"
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-shows.php:213
+msgid "You do not have any favourite TV shows."
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-shows.php:180
+msgid "TV shows per page: "
+msgstr ""
+
+#: blockter/template-parts/my-account/favorite-shows.php:181
+msgid "5 shows"
+msgstr ""
+
+#: blockter/template-parts/my-account/my-movies.php:211
+msgid "You do not have any movies."
+msgstr ""
+
+#: blockter/template-parts/my-account/my-shows.php:202
+msgid "You do not have any TV shows."
+msgstr ""
+
+#: blockter/template-parts/my-account/my-shows.php:169
+msgid "TV shows per page: %d shows"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:15
+msgid "My Profile"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:16
+msgid "My Movies"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:17
+msgid "Favourite Movies"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:18
+msgid "My TV Shows"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:19
+msgid "Favourite TV Shows"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:20
+msgid "Change Password"
+msgstr ""
+
+#: blockter/template-parts/my-account/navigation.php:21
+msgid "Logout"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:14
+msgid "This email is already used by another user.  try a different one."
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:12
+msgid "The Email you entered is not valid.  please try again."
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:40
+msgid "Update Information for"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:46
+msgid "User Name"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:50
+msgid "E-mail *"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:56
+msgid "First Name"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:60
+msgid "Last Name"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:68
+msgid "Display name publicly as"
+msgstr ""
+
+#: blockter/template-parts/my-account/user-profile.php:102
+msgid "Website"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:42
+msgid "HT Movie"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:53
+msgid "Unyson"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:58
+msgid "Kirki"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:63
+msgid "Envato Market"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:69
+msgid "Visual Composer"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:75
+msgid "AccessPress Social Login Lite"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:97
+msgid "Install Required Plugins"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:98
+msgid "Install Plugins"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:99
+msgid "Installing Plugin: %s"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:100
+msgid "Something went wrong with the plugin API."
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:101
+msgid "This theme requires the following plugin: %1$s."
+msgid_plural "This theme requires the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:102
+msgid "This theme recommends the following plugin: %1$s."
+msgid_plural "This theme recommends the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:103
+msgid "Sorry, but you do not have the correct permissions to install the %s plugin. Contact the administrator of this site for help on getting the plugin installed."
+msgid_plural "Sorry, but you do not have the correct permissions to install the %s plugins. Contact the administrator of this site for help on getting the plugins installed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:104
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:105
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:106
+msgid "Sorry, but you do not have the correct permissions to activate the %s plugin. Contact the administrator of this site for help on getting the plugin activated."
+msgid_plural "Sorry, but you do not have the correct permissions to activate the %s plugins. Contact the administrator of this site for help on getting the plugins activated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:107
+msgid "The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s."
+msgid_plural "The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:108
+msgid "Sorry, but you do not have the correct permissions to update the %s plugin. Contact the administrator of this site for help on getting the plugin updated."
+msgid_plural "Sorry, but you do not have the correct permissions to update the %s plugins. Contact the administrator of this site for help on getting the plugins updated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:109
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:110
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:111
+msgid "Return to Required Plugins Installer"
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:112
+msgid "Plugin activated successfully."
+msgstr ""
+
+#: blockter/TGM-Plugin-Activation/recommend_plugins.php:113
+msgid "All plugins installed and activated successfully. %s"
+msgstr ""
+
+#: blockter/vc_templates/brand.php:22
+msgid "Brand Logo image"
+msgstr ""
+
+#: blockter/vc_templates/landing.php:23
+msgid "Landing image"
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:125, blockter/vc_templates/show_slider.php:114
+msgid "Watch Trailer"
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:130, blockter/vc_templates/show_slider.php:119
+msgid "share"
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:169, blockter/vc_templates/show_slider.php:158
+msgid "Run Time: "
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:175, blockter/vc_templates/show_slider.php:164
+msgid "Tagline:"
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:181, blockter/vc_templates/show_slider.php:170
+msgid "Release Date: "
+msgstr ""
+
+#: blockter/vc_templates/movie_slider.php:187, blockter/vc_templates/show_slider.php:176
+msgid "More Detail"
+msgstr ""
+
+#: blockter/vc_templates/movie_tab.php:70, blockter/vc_templates/movie_tab_bymovie.php:177, blockter/vc_templates/movie_tab_bymovie.php:197, blockter/vc_templates/movie_tab_bymovie.php:106, blockter/vc_templates/movie_tab_bymovie.php:120, blockter/vc_templates/movie_tab_fw.php:158, blockter/vc_templates/movie_tab_fw.php:175, blockter/vc_templates/movie_tab_fw.php:67, blockter/vc_templates/movie_tab_fw.php:80, blockter/vc_templates/show_tab.php:70, blockter/vc_templates/show_tab_col.php:104, blockter/vc_templates/show_tab_col.php:129, blockter/vc_templates/show_tab_col.php:49, blockter/vc_templates/show_tab_col.php:75, blockter/vc_templates/show_tab_fw.php:103, blockter/vc_templates/show_tab_fw.php:128, blockter/vc_templates/show_tab_fw.php:48, blockter/vc_templates/show_tab_fw.php:74, blockter/vc_templates/tv_show_tab_by_tv_show.php:176, blockter/vc_templates/tv_show_tab_by_tv_show.php:196, blockter/vc_templates/tv_show_tab_by_tv_show.php:105, blockter/vc_templates/tv_show_tab_by_tv_show.php:119
+msgid "All"
+msgstr ""
+
+#: blockter/vc_templates/movie_tab_bymovie.php:194, blockter/vc_templates/movie_tab_bymovie.php:117, blockter/vc_templates/movie_tab_fw.php:172, blockter/vc_templates/movie_tab_fw.php:77, blockter/vc_templates/show_tab_col.php:120, blockter/vc_templates/show_tab_col.php:66, blockter/vc_templates/show_tab_fw.php:119, blockter/vc_templates/show_tab_fw.php:65, blockter/vc_templates/tv_show_tab_by_tv_show.php:193, blockter/vc_templates/tv_show_tab_by_tv_show.php:116
+msgid "SORT BY"
+msgstr ""
+
+#: blockter/vc_templates/movie_trailer_horizontal.php:106, blockter/vc_templates/movie_trailer_vertical.php:113
+msgid "No Title"
+msgstr ""
+
+#: form-singup.php:60
+msgid "sign up"
+msgstr ""
+
+#: form-singup.php:63
+msgid "Username"
+msgstr ""
+
+#: form-singup.php:65, form-singup.php:75
+msgid "*This field is required"
+msgstr ""
+
+#: form-singup.php:68
+msgid "Email Address"
+msgstr ""
+
+#: form-singup.php:70
+msgid "*A valid email address is required"
+msgstr ""
+
+#: form-singup.php:73
+msgid "Password"
+msgstr ""
+
+#: form-singup.php:78
+msgid "Confirm Password"
+msgstr ""
+
+#: form-singup.php:80
+msgid "*Your password and comfirmation password doesn't match"
+msgstr ""

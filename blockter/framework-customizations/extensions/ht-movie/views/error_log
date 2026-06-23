@@ -1,0 +1,4 @@
+[16-Jun-2026 12:52:23 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/insomni2/public_html/wp-content/themes/blockter/framework-customizations/extensions/ht-movie/views/mv_actor.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/insomni2/public_html/wp-content/themes/blockter/framework-customizations/extensions/ht-movie/views/mv_actor.php on line 5

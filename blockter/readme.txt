@@ -1,0 +1,2 @@
+# Blockter theme
+## From Haintheme

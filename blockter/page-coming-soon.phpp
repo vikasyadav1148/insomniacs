@@ -1,0 +1,2740 @@
+<?php
+/**
+ * Template Name: Insomniacs Cinematic Release Schedule
+ * Description: All-in-One Movie & TV Release Calendar v10. A premium, high-fidelity responsive dashboard with an interactive spiral-ring desk calendar, virtual cell countdowns, live-preview companion smartphone, detail modals, responsive search/filters, and an integrated sidebar planner. Runs modularly inside WordPress or as a standalone landing page template.
+ * Version: 10.0 - Final Production Code
+ * Author: Vikas Yadav
+ */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// ==========================================
+// 1. DYNAMIC WORDPRESS POST ACCESS HOOKS
+// ==========================================
+/**
+ * Register AJAX toggle favorites handler. Toggles favorites in the user's secure cookie.
+ * This can be placed directly inside functions.php, or safely auto-registered here
+ * to guarantee plug-and-play compatibility!
+ */
+if ( ! function_exists( 'insom_v3_toggle_fav_handler' ) ) {
+    function insom_v3_toggle_fav_handler() {
+        if ( isset( $_POST['post_id'] ) ) {
+            $post_id = intval( $_POST['post_id'] );
+            $favs_cookie = isset( $_COOKIE['idc_favs'] ) ? sanitize_text_field( $_COOKIE['idc_favs'] ) : '';
+            $favs = ! empty( $favs_cookie ) ? explode( ',', $favs_cookie ) : array();
+
+            if ( ( $key = array_search( $post_id, $favs ) ) !== false ) {
+                unset( $favs[$key] );
+            } else {
+                $favs[] = $post_id;
+            }
+
+            $cookie_val = implode( ',', $favs );
+            // Save cookie for 30 days
+            setcookie( 'idc_favs', $cookie_val, time() + ( 30 * 24 * 60 * 60 ), COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+            
+            wp_send_json_success( array(
+                'post_id' => $post_id,
+                'favs'    => array_values( $favs )
+            ) );
+        } else {
+            wp_send_json_error( 'Invalid post parameters.' );
+        }
+        wp_die();
+    }
+    add_action( 'wp_ajax_insom_v3_toggle_fav', 'insom_v3_toggle_fav_handler' );
+    add_action( 'wp_ajax_nopriv_insom_v3_toggle_fav', 'insom_v3_toggle_fav_handler' );
+}
+
+/**
+ * Register AJAX handler to send gorgeous HTML emails for cinema release reminders.
+ */
+if ( ! function_exists( 'insom_v3_send_reminder_handler' ) ) {
+    function insom_v3_send_reminder_handler() {
+        if ( isset( $_POST['email'] ) && isset( $_POST['movie_title'] ) ) {
+            $email          = sanitize_email( $_POST['email'] );
+            $name           = sanitize_text_field( $_POST['name'] );
+            $movie_title    = sanitize_text_field( $_POST['movie_title'] );
+            $movie_type     = sanitize_text_field( $_POST['movie_type'] );
+            $movie_date     = sanitize_text_field( $_POST['movie_date'] );
+            $movie_duration = sanitize_text_field( $_POST['movie_duration'] );
+            $movie_genre    = sanitize_text_field( $_POST['movie_genre'] );
+            $movie_rating   = sanitize_text_field( $_POST['movie_rating'] );
+            $movie_score    = sanitize_text_field( $_POST['movie_score'] );
+            $movie_director = sanitize_text_field( $_POST['movie_director'] );
+            $movie_cast     = sanitize_text_field( $_POST['movie_cast'] );
+            $movie_tagline  = sanitize_text_field( $_POST['movie_tagline'] );
+            $movie_desc     = wp_kses_post( $_POST['movie_description'] );
+            $movie_gradient = sanitize_text_field( $_POST['movie_gradient'] );
+            $movie_accent   = sanitize_text_field( $_POST['movie_accent'] );
+
+            $accent_color = ! empty( $movie_accent ) ? $movie_accent : '#ef4444';
+            $subject      = "🎬 Connection Secured: Premiere Alert for {$movie_title}!";
+            $headers      = array('Content-Type: text/html; charset=UTF-8');
+
+            ob_start();
+            ?>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title><?php echo esc_html( $movie_title ); ?></title>
+                <style>
+                    body {
+                        background-color: #0c0c0e !important;
+                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                        color: #f3f4f6 !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                    .container {
+                        max-width: 600px !important;
+                        margin: 40px auto !important;
+                        background-color: #121216 !important;
+                        border: 1px solid #222228 !important;
+                        border-radius: 20px !important;
+                        overflow: hidden !important;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+                    }
+                    .header {
+                        background: <?php echo ! empty( $movie_gradient ) ? $movie_gradient : 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #450a0a 100%)'; ?> !important;
+                        padding: 40px 30px !important;
+                        text-align: center !important;
+                    }
+                    .header h1 {
+                        font-size: 32px !important;
+                        font-weight: 800 !important;
+                        letter-spacing: -0.025em !important;
+                        margin: 10px 0 0 0 !important;
+                        color: #ffffff !important;
+                        text-transform: uppercase !important;
+                    }
+                    .badge {
+                        display: inline-block !important;
+                        padding: 6px 12px !important;
+                        font-size: 10px !important;
+                        font-weight: bold !important;
+                        border-radius: 9999px !important;
+                        text-transform: uppercase !important;
+                        letter-spacing: 0.15em !important;
+                        background-color: rgba(239, 68, 68, 0.2) !important;
+                        color: <?php echo esc_attr( $accent_color ); ?> !important;
+                        border: 1px solid rgba(239, 68, 68, 0.4) !important;
+                    }
+                    .content {
+                        padding: 40px 30px !important;
+                    }
+                    .welcome {
+                        font-size: 16px !important;
+                        line-height: 1.6 !important;
+                        color: #a3a3a3 !important;
+                        margin-bottom: 30px !important;
+                        border-bottom: 1px solid #222228 !important;
+                        padding-bottom: 20px !important;
+                    }
+                    .welcome strong {
+                        color: #ffffff !important;
+                    }
+                    .grid-card {
+                        background-color: #18181f !important;
+                        border: 1px solid #262630 !important;
+                        border-radius: 16px !important;
+                        padding: 24px !important;
+                        margin-bottom: 30px !important;
+                    }
+                    .grid-title {
+                        font-size: 11px !important;
+                        font-weight: bold !important;
+                        color: <?php echo esc_attr( $accent_color ); ?> !important;
+                        letter-spacing: 0.15em !important;
+                        text-transform: uppercase !important;
+                        margin-bottom: 12px !important;
+                    }
+                    .metadata-list {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        list-style: none !important;
+                    }
+                    .metadata-item {
+                        display: flex !important;
+                        justify-content: space-between !important;
+                        padding: 10px 0 !important;
+                        border-bottom: 1px solid #222228 !important;
+                        font-size: 13px !important;
+                    }
+                    .metadata-label {
+                        color: #737373 !important;
+                        font-weight: 600 !important;
+                    }
+                    .metadata-value {
+                        color: #ffffff !important;
+                        font-weight: 700 !important;
+                    }
+                    .synopsis {
+                        font-size: 14px !important;
+                        line-height: 1.7 !important;
+                        color: #d4d4d4 !important;
+                        margin-top: 25px !important;
+                    }
+                    .footer {
+                        background-color: #09090b !important;
+                        padding: 30px !important;
+                        text-align: center !important;
+                        font-size: 11px !important;
+                        color: #52525b !important;
+                        border-top: 1px solid #18181b !important;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <span class="badge"><?php echo esc_html( $movie_type ); ?> PREMIERE ALERT</span>
+                        <h1><?php echo esc_html( $movie_title ); ?></h1>
+                        <?php if ( ! empty( $movie_tagline ) ) : ?>
+                            <p style="color: #cbd5e1; font-style: italic; font-size: 13px; margin: 10px 0 0 0;"><?php echo esc_html( $movie_tagline ); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="content">
+                        <div class="welcome">
+                            Hello <strong><?php echo esc_html( $name ); ?></strong>,<br><br>
+                            Your cinematic reminder has been successfully activated! Our transmission pipelines have secured coordinates for the upcoming premiere of <strong><?php echo esc_html( $movie_title ); ?></strong>.
+                        </div>
+                        <div class="grid-card">
+                            <div class="grid-title">Premiere Specifications</div>
+                            <div class="metadata-list">
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Release Date:</span>
+                                    <span class="metadata-value" style="color: <?php echo esc_attr( $accent_color ); ?>;"><?php echo esc_html( $movie_date ); ?></span>
+                                </div>
+                                <?php if ( ! empty( $movie_duration ) ) : ?>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Duration / Format:</span>
+                                    <span class="metadata-value"><?php echo esc_html( $movie_duration ); ?></span>
+                                </div>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $movie_genre ) ) : ?>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Genre:</span>
+                                    <span class="metadata-value"><?php echo esc_html( $movie_genre ); ?></span>
+                                </div>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $movie_rating ) ) : ?>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Rating:</span>
+                                    <span class="metadata-value"><?php echo esc_html( $movie_rating ); ?></span>
+                                </div>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $movie_score ) ) : ?>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Cinematic Score:</span>
+                                    <span class="metadata-value">⭐ <?php echo esc_html( $movie_score ); ?>/10</span>
+                                </div>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $movie_director ) ) : ?>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Director/Creator:</span>
+                                    <span class="metadata-value"><?php echo esc_html( $movie_director ); ?></span>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                            <?php if ( ! empty( $movie_desc ) ) : ?>
+                                <div class="synopsis"><?php echo wp_kses_post( $movie_desc ); ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        Sent securely from the <strong>Insomniacs Cinematic Hub</strong>.<br>
+                        Stay synchronized with global entertainment developments.<br><br>
+                        © <?php echo date('Y'); ?> Insomniacs | Powered by WordPress.
+                    </div>
+                </div>
+            </body>
+            </html>
+            <?php
+            $message = ob_get_clean();
+
+            $mail_sent = wp_mail( $email, $subject, $message, $headers );
+
+            wp_send_json_success( array(
+                'message'   => 'Secure reminder transmission activated successfully.',
+                'mail_sent' => $mail_sent
+            ) );
+        } else {
+            wp_send_json_error( 'Invalid submission parameters.' );
+        }
+        wp_die();
+    }
+    add_action( 'wp_ajax_insom_v3_send_reminder', 'insom_v3_send_reminder_handler' );
+    add_action( 'wp_ajax_nopriv_insom_v3_send_reminder', 'insom_v3_send_reminder_handler' );
+}
+
+/**
+ * Palette Color Generator - Creates premium, randomized yet deterministic 
+ * cinematic gradients and matching neon accent colors based on post ID.
+ */
+function get_cinematic_colors( $id ) {
+    $palettes = array(
+        array( 'gradient' => 'linear-gradient(135deg, #010409 0%, #0c1a30 50%, #c2a13b 100%)', 'accent' => '#d4af37' ), // Gold Crown
+        array( 'gradient' => 'linear-gradient(135deg, #000000 0%, #450a0a 60%, #b91c1c 100%)', 'accent' => '#ef4444' ), // Crimson Fire
+        array( 'gradient' => 'linear-gradient(135deg, #0b1329 0%, #1e1b4b 50%, #dc2626 100%)', 'accent' => '#3b82f6' ), // Deep Sky
+        array( 'gradient' => 'linear-gradient(135deg, #020617 0%, #030712 60%, #1e40af 100%)', 'accent' => '#38bdf8' ), // Cyber Blue
+        array( 'gradient' => 'linear-gradient(135deg, #180828 0%, #3b0764 50%, #db2777 100%)', 'accent' => '#e879f9' ), // Neon Purple
+        array( 'gradient' => 'linear-gradient(135deg, #0f172a 0%, #1c1917 50%, #78350f 100%)', 'accent' => '#f59e0b' ), // Molten Amber
+    );
+    
+    // Check if custom metadata override exists
+    $meta_gradient = get_post_meta( $id, 'poster_gradient', true );
+    $meta_accent   = get_post_meta( $id, 'accent_color', true );
+    
+    if ( ! empty( $meta_gradient ) && ! empty( $meta_accent ) ) {
+        return array( 'gradient' => $meta_gradient, 'accent' => $meta_accent );
+    }
+    
+    // Match deterministically
+    $index = $id % count( $palettes );
+    return $palettes[$index];
+}
+
+// ==========================================
+// 2. QUERY WORDPRESS RELEASES
+// ==========================================
+
+// Define the exact types
+$detected_post_types = array( 'ht_movie', 'ht_show', 'ht_tv_show' );
+
+// Build the array for the Admin Debugger (maintains compatibility with your original code)
+$all_registered_public_types = array();
+foreach ( $detected_post_types as $pt ) {
+    $obj = new stdClass();
+    $obj->name = $pt;
+    $obj->label = ucfirst(str_replace('_', ' ', $pt));
+    $all_registered_public_types[] = $obj;
+}
+
+// Set up the Query
+$args = array(
+    'post_type'      => $detected_post_types, 
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+    'orderby'        => 'date',
+    'order'          => 'ASC',
+);
+
+$query = new WP_Query( $args );
+$posts_data = array();
+$today = date('Y-m-d');
+
+// Diagnostic logs for WordPress Administrators
+$cinematic_diagnostics = array(
+    'post_types_queried'     => $detected_post_types,
+    'all_registered_public'  => array(),
+    'posts_diagnosed'        => array(),
+);
+
+if ( ! empty( $all_registered_public_types ) ) {
+    foreach ( $all_registered_public_types as $pt_obj ) {
+        $cinematic_diagnostics['all_registered_public'][] = array(
+            'name'  => $pt_obj->name,
+            'label' => $pt_obj->label,
+        );
+    }
+}
+
+if ( $query->have_posts() ) {
+    while ( $query->have_posts() ) {
+        $query->the_post();
+        $id = get_the_ID();
+        // --- ROBUST DATE RESOLUTION WITH TYPE-SPECIFIC CONDITION ---
+        $fw_options = get_post_meta($id, 'fw_options', true);
+        $post_type = get_post_type();
+        $resolved_date = '';
+
+        // Check if current post is a TV Show or Series based on your post types
+        $is_tv_series = in_array($post_type, array('ht_show', 'ht_tv_show'));
+
+        if ($is_tv_series && is_array($fw_options)) {
+            // TV SPECIFIC: Target the nested 'air_date' inside 'seasons'
+            array_walk_recursive($fw_options, function($value, $key) use (&$resolved_date) {
+                if ($key === 'air_date' && !empty($value)) $resolved_date = $value;
+            });
+        } else if (is_array($fw_options)) {
+            // MOVIE SPECIFIC: Target the nested 'release_date' inside 'fw_options'
+            array_walk_recursive($fw_options, function($value, $key) use (&$resolved_date) {
+                if ($key === 'release_date' && !empty($value)) $resolved_date = $value;
+            });
+        }
+        $release_date_from_fw = $resolved_date;
+
+        // Fallback sequence: 
+        // 1. If TV/movie parsing above found a date, use it.
+        // 2. Otherwise, check standard meta keys (handles movies & fallback for TV)
+        // 3. Finally, fallback to publish date
+        $resolved_date = $resolved_date ?: get_post_meta($id, 'release_date', true) ?: get_post_meta($id, 'ht_movie_release_date', true) ?: get_the_date('Y-m-d');
+        
+        // Calculate timestamp from the resolved date
+        $timestamp = strtotime($resolved_date);
+        
+        // Update display variables
+        $resolved_date = date('Y-m-d', $timestamp);
+        $dayNum    = (int) date( 'j', $timestamp );
+        $monthStr  = strtoupper( date( 'M', $timestamp ) );
+        $monthNum  = (int) date( 'm', $timestamp );
+        $yearNum   = (int) date( 'Y', $timestamp );
+        $displayD  = date( 'j M', $timestamp );
+        
+        // Fallback or dynamic URL logic
+        $cal_date_val = ( $resolved_date < $today ) ? $today : $resolved_date;
+
+        // Diagnostic support variables
+        $all_post_meta = get_post_meta($id);
+        $chosen_meta_key = $release_date_from_fw ? 'fw_options[0][release_date]' : (get_post_meta($id, 'release_date', true) ? 'release_date' : (get_post_meta($id, 'ht_movie_release_date', true) ? 'ht_movie_release_date' : 'post_publish_date'));
+        
+        // Get custom metadata values
+        $duration = get_post_meta( $id, 'duration', true );
+        $rating   = get_post_meta( $id, 'rating', true ) ?: 'PG-13';
+        $tagline  = get_post_meta( $id, 'tagline', true ) ?: get_post_meta( $id, 'tagline', true );
+        $score    = get_post_meta( $id, 'score', true ) ?: '8.5';
+        $director = get_post_meta( $id, 'director', true ) ?: get_post_meta( $id, 'director_or_creator', true ) ?: 'Director';
+        
+        // Robust trailer URL resolution
+        $trailer_url = get_post_meta( $id, 'trailer_url', true ) 
+                       ?: get_post_meta( $id, 'youtube_url', true ) 
+                       ?: get_post_meta( $id, 'video_url', true ) 
+                       ?: get_post_meta( $id, 'trailer', true ) 
+                       ?: get_post_meta( $id, 'youtube', true ) 
+                       ?: '';
+                       
+        // Scan fw_options recursively for nested keys (youtube, video, trailer, etc)
+        $fw_trailer = '';
+        if (is_array($fw_options)) {
+            array_walk_recursive($fw_options, function($value, $key) use (&$fw_trailer) {
+                if (is_string($value)) {
+                    $lower_key = strtolower($key);
+                    if (strpos($lower_key, 'trailer') !== false || strpos($lower_key, 'video') !== false || strpos($lower_key, 'youtube') !== false || strpos($lower_key, 'embed') !== false) {
+                        if (filter_var($value, FILTER_VALIDATE_URL) || strpos($value, 'youtube') !== false || strpos($value, 'youtu.be') !== false || strpos($value, 'vimeo') !== false) {
+                            $fw_trailer = $value;
+                        }
+                    }
+                }
+            });
+        }
+        $trailer_url = !empty($fw_trailer) ? $fw_trailer : $trailer_url;
+
+        // Improved fallback for nested video trailer IDs
+        if (empty($trailer_url) && !empty($fw_options)) {
+            // Check both potential array structures
+            $data = is_array($fw_options[0]) ? $fw_options[0] : $fw_options;
+            
+            if (isset($data['video']) && is_array($data['video']) && !empty($data['video'][0])) {
+                $trailer_url = 'https://www.youtube.com/embed/' . $data['video'][0];
+            }
+        }
+        
+        // Fetch Cast Members (Support both custom arrays or comma separated text)
+        $cast_meta  = get_post_meta( $id, 'cast', true );
+        $cast_array = ! empty( $cast_meta ) ? ( is_array( $cast_meta ) ? $cast_meta : array_map( 'trim', explode( ',', $cast_meta ) ) ) : array( 'Cast Members' );
+        
+        // Fetch Genres (Supports WP taxonomy terms or custom field lists)
+        $tax_genres  = wp_get_post_terms( $id, 'genre', array( 'fields' => 'names' ) );
+        $meta_genres = get_post_meta( $id, 'genres', true );
+        if ( ! is_wp_error( $tax_genres ) && ! empty( $tax_genres ) ) {
+            $genres = $tax_genres;
+        } elseif ( ! empty( $meta_genres ) ) {
+            $genres = is_array( $meta_genres ) ? $meta_genres : array_map( 'trim', explode( ',', $meta_genres ) );
+        } else {
+            $genres = array( get_post_type() == 'ht_movie' ? 'Movie' : 'TV Show' );
+        }
+        
+        // Trivia Bullets
+        $trivia_meta  = get_post_meta( $id, 'trivia', true );
+        $trivia_array = ! empty( $trivia_meta ) ? ( is_array( $trivia_meta ) ? $trivia_meta : array_filter( array_map( 'trim', explode( "\n", $trivia_meta ) ) ) ) : array();
+
+        // Get dynamic colors
+        $colors = get_cinematic_colors( $id );
+
+        // Determine Type with robust smart checking
+        $post_type = get_post_type();
+        $is_tv = ( 
+            $post_type == 'ht_show' || 
+            $post_type == 'ht_tv_show' || 
+            strpos( $post_type, 'show' ) !== false || 
+            strpos( $post_type, 'tv' ) !== false || 
+            strpos( $post_type, 'series' ) !== false || 
+            strpos( $post_type, 'season' ) !== false ||
+            preg_match( '/\b(show|tv|series|episode|season)\b/i', $post_type )
+        );
+        
+        // 1. Check duration metadata for episode/season keywords
+        if ( ! $is_tv && ! empty( $duration ) ) {
+            if ( preg_match( '/\b(episode|episodes|season|seasons|tv|show|series)\b/i', $duration ) ) {
+                $is_tv = true;
+            }
+        }
+        
+        // 2. Check genres/taxonomies for TV categories
+        if ( ! $is_tv && ! empty( $genres ) ) {
+            foreach ( $genres as $gen ) {
+                if ( preg_match( '/\b(tv|show|series|showcase)\b/i', $gen ) ) {
+                    $is_tv = true;
+                    break;
+                }
+            }
+        }
+
+        // 3. Check post title for TV/Show keywords (e.g. Bridgerton Season 3)
+        if ( ! $is_tv ) {
+            $title_lower = strtolower( get_the_title() );
+            if ( preg_match( '/\b(season|episode|episodes|series|tv-show|tv show|tvseries|s\d{1,2}e\d{1,2})\b/i', $title_lower ) ) {
+                $is_tv = true;
+            }
+        }
+
+        // 4. Check post categories or tags for TV/Show indicators
+        if ( ! $is_tv ) {
+            $post_categories = wp_get_post_categories( $id, array( 'fields' => 'all' ) );
+            if ( ! empty( $post_categories ) && ! is_wp_error( $post_categories ) ) {
+                foreach ( $post_categories as $c ) {
+                    if ( preg_match( '/\b(tv|show|series|season)\b/i', $c->name ) || preg_match( '/\b(tv|show|series|season)\b/i', $c->slug ) ) {
+                        $is_tv = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if ( ! $is_tv ) {
+            $post_tags = wp_get_post_tags( $id, array( 'fields' => 'all' ) );
+            if ( ! empty( $post_tags ) && ! is_wp_error( $post_tags ) ) {
+                foreach ( $post_tags as $t ) {
+                    if ( preg_match( '/\b(tv|show|series|season)\b/i', $t->name ) || preg_match( '/\b(tv|show|series|season)\b/i', $t->slug ) ) {
+                        $is_tv = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 5. Check other custom fields for type signals (format, show_type, type)
+        if ( ! $is_tv ) {
+            $meta_type = get_post_meta( $id, 'type', true ) ?: get_post_meta( $id, 'show_type', true ) ?: get_post_meta( $id, 'format', true );
+            if ( ! empty( $meta_type ) ) {
+                if ( preg_match( '/\b(tv|show|series|season)\b/i', $meta_type ) ) {
+                    $is_tv = true;
+                }
+            }
+        }
+        
+        $type_formatted = $is_tv ? 'TV Series' : 'Movie';
+
+        // Filter out duplicate or redundant type names from genres (e.g., 'Movie', 'TV Show', 'TV Series')
+        $filtered_genres = array();
+        if ( ! empty( $genres ) ) {
+            foreach ( $genres as $g ) {
+                $trimmed = trim( $g );
+                $lower = strtolower( $trimmed );
+                if ( 
+                    $lower !== 'movie' && 
+                    $lower !== 'movies' && 
+                    $lower !== 'tv show' && 
+                    $lower !== 'tv series' && 
+                    $lower !== 'tv_show' && 
+                    $lower !== 'tv' && 
+                    $lower !== 'series' && 
+                    $lower !== 'show' && 
+                    $lower !== 'shows' && 
+                    $lower !== 'ht_movie' && 
+                    $lower !== 'ht_show' && 
+                    $lower !== 'ht_tv_show'
+                ) {
+                    $filtered_genres[] = $trimmed;
+                }
+            }
+        }
+        if ( empty( $filtered_genres ) ) {
+            // Set beautiful cinematic fallback genres based on ID
+            $genres_options = array( 'Action', 'Sci-Fi', 'Drama', 'Adventure', 'Thriller', 'Mystery', 'Crime', 'Comedy' );
+            $filtered_genres = array( $genres_options[ $id % count( $genres_options ) ] );
+        }
+        $genres = $filtered_genres;
+
+        // Pre-process and sanitize raw description/synopsis with extensive custom-field fallbacks
+        // Fetch raw description/synopsis with extensive custom-field fallbacks preferring content
+        $raw_desc = get_post_field( 'post_content', $id );
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_field( 'post_excerpt', $id );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_meta( $id, 'synopsis', true );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_meta( $id, 'plot', true );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_meta( $id, 'storyline', true );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_meta( $id, 'story', true );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_post_meta( $id, 'description', true );
+        }
+        if ( empty( $raw_desc ) ) {
+            $raw_desc = get_the_excerpt( $id );
+        }
+
+        // Standard WordPress shortcode stripping
+        $clean_desc = strip_shortcodes( $raw_desc );
+        
+        // Remove VC or page builder style tags safely
+        $clean_desc = preg_replace( '/\[\/?[^\]]+\]/', '', $clean_desc );
+        
+        // Clean absolute video/social URLs from paragraph starts
+        $clean_desc = preg_replace( '/\bhttps?:\/\/\S+/i', '', $clean_desc );
+
+        // Decode HTML entities
+        $clean_desc = html_entity_decode( $clean_desc, ENT_QUOTES, 'UTF-8' );
+
+        // Condense spacing and trim
+        $clean_desc = preg_replace( '/\s+/', ' ', $clean_desc );
+        $clean_desc = trim( $clean_desc );
+
+        // Fallback if cleaned text is blank
+        if ( empty( $clean_desc ) || $clean_desc === ' ' || strtolower( $clean_desc ) === 'no story synopsis catalogued yet.' ) {
+            $genre_text = ! empty( $genres ) ? implode( ', ', array_slice( $genres, 0, 2 ) ) : $type_formatted;
+            $clean_desc = "An upcoming " . strtolower( $genre_text ) . " premiere titled " . get_the_title() . ". Stay tuned for official storyline synopsis, theatrical reviews, and production updates as the " . $displayD . " premiere approaches!";
+        }
+
+        $posts_data[] = array(
+            'id'                  => (string) $id,
+            'wp_id'               => $id,
+            'post_type'           => get_post_type(),
+            'title'               => get_the_title(),
+            'type'                => (get_post_type() === 'ht_movie') ? 'Movie' : 'TV Series',
+            'originalReleaseDate' => $resolved_date, // <--- THIS MUST BE $resolved_date
+            'cal_date'            => ( $resolved_date < $today ) ? $today : $resolved_date,
+            'displayDate'         => $displayD,
+            'month'               => $monthStr,
+            'monthNum'            => $monthNum,
+            'day'                 => $dayNum,
+            'year'                => $yearNum,
+            'description'         => $clean_desc,
+            'duration'            => $duration ?: ( $type_formatted == 'Movie' ? '2h 15m' : '8 Episodes' ),
+            'genre'               => $genres,
+            'rating'              => $rating,
+            'cast'                => $cast_array,
+            'directorOrCreator'   => $director,
+            'tagline'             => $tagline ?: '',
+            'score'               => (float) $score,
+            'posterGradient'      => $colors['gradient'],
+            'accentColor'         => $colors['accent'],
+            'trivia'              => array_values( $trivia_array ),
+            'permalink'           => get_permalink( $id ),
+            'thumb'               => get_the_post_thumbnail_url( $id, 'large' ) ?: '',
+            'trailerUrl'          => $trailer_url ?: '', // Dynamic YouTube/Vimeo Trailer embed URL
+            'is_fav'              => ( isset( $_COOKIE['idc_favs'] ) && in_array( $id, explode( ',', $_COOKIE['idc_favs'] ) ) )
+        );
+
+        $dense_meta = array();
+        if ( ! empty( $all_post_meta ) ) {
+            foreach ( $all_post_meta as $mk => $mvs ) {
+                $mv = isset($mvs[0]) ? $mvs[0] : '';
+                if ( strlen( $mv ) > 200 ) {
+                    $mv = substr( $mv, 0, 200 ) . '... (truncated)';
+                }
+                $dense_meta[$mk] = $mv;
+            }
+        }
+        $cinematic_diagnostics['posts_diagnosed'][] = array(
+            'id'              => $id,
+            'title'           => get_the_title(),
+            'post_type'       => get_post_type(),
+            'chosen_key'      => $chosen_meta_key,
+            'resolved_date'   => $resolved_date,
+            'meta'            => $dense_meta
+        );
+    }
+}
+wp_reset_postdata();
+
+// ==========================================
+// 3. CHRONOLOGICAL SORT: Future dates first
+// ==========================================
+if ( ! empty( $posts_data ) ) {
+    usort( $posts_data, function( $a, $b ) {
+        $today = date('Y-m-d');
+        
+        // Check if dates are in the past
+        $a_past = $a['originalReleaseDate'] < $today;
+        $b_past = $b['originalReleaseDate'] < $today;
+
+        // If one is in the past and the other is future, future comes first
+        if ( $a_past && ! $b_past ) return 1;
+        if ( ! $a_past && $b_past ) return -1;
+
+        // If both are in the future or both in the past, sort by date ASC
+        return strcmp( $a['originalReleaseDate'], $b['originalReleaseDate'] );
+    } );
+}
+
+// Fallback Mock data array so page immediately lights up for the user when empty custom posts!
+$is_using_mock_fallback = false;
+if ( empty( $posts_data ) ) {
+    $is_using_mock_fallback = true;
+    $posts_data = array(
+        array(
+            'id' => 'toy-story-5',
+            'title' => 'TOY STORY 5',
+            'type' => 'Movie',
+            'post_type' => 'ht_movie',
+            'originalReleaseDate' => '2026-06-17',
+            'displayDate' => '17 JUN',
+            'month' => 'JUN',
+            'monthNum' => 6,
+            'day' => 17,
+            'year' => 2026,
+            'description' => 'Woody, Buzz, and the gang face their newest and most complex challenge yet when they are forced to compete with a brand-new generation of smart devices and artificial intelligence toys that threaten to replace traditional playthings forever.',
+            'duration' => '1h 42m',
+            'genre' => array('Animation', 'Adventure', 'Comedy', 'Family'),
+            'rating' => 'G',
+            'cast' => array('Tom Hanks', 'Tim Allen', 'Joan Cusack', 'Tony Hale'),
+            'directorOrCreator' => 'Andrew Stanton',
+            'tagline' => 'Toys vs Tech: The ultimate final playdate.',
+            'score' => 8.9,
+            'posterGradient' => 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #d97706 100%)',
+            'accentColor' => '#f59e0b',
+            'trivia' => array('The fifth installment in Pixar’s flagship franchise.', 'Explicitly tackles the digital age and children’s screen-time dependencies.'),
+            'permalink' => esc_url( home_url( '/' ) ),
+            'thumb' => '',
+            'trailerUrl' => 'https://www.youtube.com/embed/Sg0DWeZbe-8', // Toy Story Teaser
+            'is_fav' => false
+        ),
+        array(
+            'id' => 'house-of-the-dragon',
+            'title' => 'HOUSE OF THE DRAGON',
+            'type' => 'TV Series',
+            'post_type' => 'ht_show',
+            'originalReleaseDate' => '2026-06-20',
+            'displayDate' => '20 JUN',
+            'month' => 'JUN',
+            'monthNum' => 6,
+            'day' => 20,
+            'year' => 2026,
+            'description' => 'The tragedy of the Dance of the Dragons reaches its fiery, devastating climax. The Green and Black factions mobilize every reserve, leading to fateful aerial dragon battles that will map the ultimate destiny of the Iron Throne.',
+            'duration' => '8 Episodes',
+            'genre' => array('Action', 'Adventure', 'Drama', 'Fantasy'),
+            'rating' => 'TV-MA',
+            'cast' => array('Emma D’Arcy', 'Matt Smith', 'Olivia Cooke', 'Steve Toussaint'),
+            'directorOrCreator' => 'Ryan Condal',
+            'tagline' => 'Fire will reign. Blood will outline the future.',
+            'score' => 9.3,
+            'posterGradient' => 'linear-gradient(135deg, #000000 0%, #450a0a 60%, #b91c1c 100%)',
+            'accentColor' => '#ef4444',
+            'trivia' => array('Season 3 covers the brutal turning-point conflicts of the Targaryen civil war.'),
+            'permalink' => esc_url( home_url( '/' ) ),
+            'thumb' => '',
+            'trailerUrl' => 'https://www.youtube.com/embed/D0_Sg1g7P8E', // House of the Dragon trailer
+            'is_fav' => false
+        ),
+        array(
+            'id' => 'the-odyssey',
+            'title' => 'ODYSSEY',
+            'type' => 'Movie',
+            'post_type' => 'ht_movie',
+            'originalReleaseDate' => '2026-07-15',
+            'displayDate' => '15 JUL',
+            'month' => 'JUL',
+            'monthNum' => 7,
+            'day' => 15,
+            'year' => 2026,
+            'description' => 'A spectacular, high-concept sci-fi reimagining of Homer’s epic. After a localized anomaly swallows a state-of-the-art exploratory super-carrier, the crew must map an interactive path through uncharted hostiles and spatial sirens to reach Earth.',
+            'duration' => '2h 45m',
+            'genre' => array('Sci-Fi', 'Mystery', 'Adventure', 'Thriller'),
+            'rating' => 'PG-13',
+            'cast' => array('Cillian Murphy', 'Florence Pugh', 'Lupita Nyong’o', 'Dev Patel'),
+            'directorOrCreator' => 'Denis Villeneuve',
+            'tagline' => 'The universe is vast. The journey home is transcendent.',
+            'score' => 9.4,
+            'posterGradient' => 'linear-gradient(135deg, #020617 0%, #030712 60%, #1e40af 100%)',
+            'accentColor' => '#38bdf8',
+            'trivia' => array('Features a custom composed ambient soundtrack with spatial audio integration.', 'Entirely filmed with next-generation IMAX digital cameras.'),
+            'permalink' => esc_url( home_url( '/' ) ),
+            'thumb' => '',
+            'trailerUrl' => 'https://www.youtube.com/embed/yS8Z9SGo2sc', // Interstellar cinematic feel
+            'is_fav' => false
+        )
+    );
+}
+// Hook design assets, Tailwind CDN, Google Fonts, and custom style overrides into the WP head of the active theme
+add_action( 'wp_head', function() {
+    ?>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS dynamic framework CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons Vector API -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Force dark background immediately to eliminate white flashes before stylesheet processing completes */
+        html, body {
+            background-color: #040406 !important;
+        }
+        
+        /* Standalone Sandbox Overrides for WP Compatibility */
+        #insom-cinematic-app-wrapper {
+            background-color: #040406;
+            color: #f5f5f7;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            max-width: 100%;
+            position: relative;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out;
+        }
+        
+        .glow-overlay-red {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 70%);
+        }
+
+        /* Seamless premium scrollbar */
+        #insom-cinematic-app-wrapper ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        #insom-cinematic-app-wrapper ::-webkit-scrollbar-track {
+            background: rgba(15, 15, 15, 0.8);
+        }
+        #insom-cinematic-app-wrapper ::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.35);
+            border-radius: 4px;
+        }
+        #insom-cinematic-app-wrapper ::-webkit-scrollbar-thumb:hover {
+            background: rgba(220, 38, 38, 0.65);
+        }
+
+        .modal-open-anim {
+            animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modalScale {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .toast-anim {
+            animation: toastSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes toastSlide {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Movie/TV Badge Glow & Hover Effects */
+        .movie-badge-glow {
+            display: inline-block !important;
+            background-color: rgba(69, 10, 10, 0.25) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            color: #f87171 !important;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.15) !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .movie-badge-glow:hover {
+            background-color: #dc2626 !important;
+            border-color: #ef4444 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.65), 0 0 30px rgba(239, 68, 68, 0.3) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .tv-badge-glow {
+            display: inline-block !important;
+            background-color: rgba(30, 27, 75, 0.25) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+            color: #60a5fa !important;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.15) !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .tv-badge-glow:hover {
+            background-color: #2563eb !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 18px rgba(59, 130, 246, 0.65), 0 0 30px rgba(59, 130, 246, 0.3) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* High-priority override styles to prevent WordPress theme conflicts on buttons and selected cards */
+        #insom-cinematic-app-wrapper #format-filters button {
+            cursor: pointer !important;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+        }
+
+        #insom-cinematic-app-wrapper #format-filters button.active-format {
+            background-color: rgba(239, 68, 68, 0.15) !important;
+            border: 1px solid rgba(239, 68, 68, 0.8) !important;
+            color: #ef4444 !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.45) !important;
+            font-weight: 800 !important;
+        }
+
+        #insom-cinematic-app-wrapper #format-filters button.inactive-format {
+            background-color: rgba(9, 9, 11, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #a3a3a3 !important;
+            font-weight: 700 !important;
+        }
+
+        #insom-cinematic-app-wrapper #format-filters button.inactive-format:hover {
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            background-color: rgba(24, 24, 27, 0.6) !important;
+        }
+
+        #insom-cinematic-app-wrapper .release-card-focused {
+            border-color: rgba(239, 68, 68, 0.8) !important;
+            background-color: rgba(4, 4, 6, 0.95) !important;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.50) !important;
+            transform: scale(1.02) !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            z-index: 10 !important;
+        }
+
+        #insom-cinematic-app-wrapper .release-card-normal {
+            border-color: rgba(255, 255, 255, 0.05) !important;
+            background-color: rgba(10, 10, 15, 0.45) !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        
+        #insom-cinematic-app-wrapper .release-card-normal:hover {
+            border-color: rgba(239, 68, 68, 0.45) !important;
+            background-color: rgba(18, 18, 24, 0.6) !important;
+            transform: scale(1.005) !important;
+        }
+
+        /* Ensure hidden is absolute */
+        #insom-cinematic-app-wrapper .hidden {
+            display: none !important;
+        }
+
+        /* High-priority modal & drawer overrides to prevent theme clipping, z-index overlays & cutoff buttons */
+        #details-modal, #reminder-modal, #calendar-drawer {
+            z-index: 999999 !important;
+            overflow-y: auto !important; /* Enable backdrop scrolling if content is too tall */
+        }
+        
+        #system-toast {
+            z-index: 1000000 !important;
+        }
+
+        /* Prevent background scroll when any modal is open */
+        body.modal-prevent-scroll {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+
+        /* Ensure modal inner containers center nicely but stay fully scrollable */
+        #details-modal .modal-open-anim, #reminder-modal .modal-open-anim {
+            margin: auto !important;
+            max-height: calc(100vh - 2rem) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important; /* Keep the container neat */
+        }
+
+        /* Make sure inside of details-modal specs is scrollable with elegant padding-bottom */
+        #details-modal .overflow-y-auto {
+            max-height: none !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding-bottom: 2rem !important;
+        }
+
+        /* Add a high-contrast close button styling so it never disappears on any backdrop or theme */
+        #details-modal button[onclick*="closeDetailsModal"] {
+            background-color: rgba(10, 10, 10, 0.95) !important;
+            border: 2px solid rgba(255, 255, 255, 0.45) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75) !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            cursor: pointer !important;
+        }
+        #details-modal button[onclick*="closeDetailsModal"]:hover {
+            border-color: rgba(239, 68, 68, 1) !important;
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
+            transform: scale(1.1) !important;
+        }
+
+        #reminder-modal button[onclick*="closeReminderModal"] {
+            background-color: rgba(10, 10, 10, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+            border-radius: 9999px !important;
+            padding: 0.5rem !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+        }
+        #reminder-modal button[onclick*="closeReminderModal"]:hover {
+            border-color: rgba(239, 68, 68, 0.8) !important;
+            color: #ffffff !important;
+            background-color: rgba(239, 68, 68, 0.25) !important;
+            transform: scale(1.05) !important;
+        }
+
+        /* User custom design merges */
+        nav.blockter-breadcrumb.flw { display: none; }
+        form#searchmovie { display: none; }
+        .max-w-7xl.mx-auto.grid.grid-cols-1.lg\:grid-cols-12.gap-8.relative.z-10.current-grid { margin-top: 15vh; }
+    </style>
+    <?php
+} );
+
+// Retrieve the dynamic WordPress site header
+get_header();
+?>
+
+<div id="insom-cinematic-app-wrapper" class="p-4 md:p-8 relative">
+    
+    <!-- Backing ambient red atmospheric glow vectors -->
+    <div class="glow-overlay-red absolute top-1/4 -left-40 w-[450px] h-[450px] rounded-full pointer-events-none z-0"></div>
+    <div class="glow-overlay-red absolute bottom-1/4 -right-40 w-[450px] h-[450px] rounded-full pointer-events-none z-0"></div>
+
+    <!-- DB Fallback Indicator notice for Admin -->
+    <?php if ( $is_using_mock_fallback && current_user_can( 'manage_options' ) ) : ?>
+        <div class="max-w-7xl mx-auto mb-6 bg-red-950/20 border border-red-900/40 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-25">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-red-650 flex items-center justify-center text-white font-bold text-xs shrink-0 select-none">!</div>
+                <div>
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider">WordPress Developer Notice (Admin only)</h5>
+                    <p class="text-[11px] text-neutral-400 mt-0.5">Custom posts not found. Displaying premium cinematic placeholders. Register custom post type <strong>ht_movie</strong> or use meta key <strong>release_date</strong> to populate live schedules!</p>
+                </div>
+            </div>
+            <a href="<?php echo admin_url('post-new.php?post_type=ht_movie'); ?>" class="text-[10px] bg-red-600 hover:bg-red-500 text-white font-extrabold px-3 py-1.5 rounded-lg transition uppercase tracking-wide">Publish First Release</a>
+        </div>
+    <?php endif; ?>
+
+    <!-- WP DEVELOPER & SITE INTEGRATION CONSOLE (Only visible to Administrators) -->
+    <?php if ( current_user_can( 'manage_options' ) ) : ?>
+        <div class="max-w-7xl mx-auto mb-6 bg-neutral-900/80 border border-neutral-800/85 rounded-2xl p-5 relative z-25 text-left select-text">
+            <div class="flex items-center justify-between cursor-pointer border-b border-neutral-800/60 pb-3" onclick="document.getElementById('wp-integration-content').classList.toggle('hidden'); this.querySelector('.arrow-ico').classList.toggle('rotate-180')">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-red-650 flex items-center justify-center text-white shrink-0 shadow-lg">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-black text-white uppercase tracking-wider font-mono">WordPress Integration Console <span class="bg-red-950/40 border border-red-900/35 text-red-400 text-[8px] px-1.5 py-0.5 rounded-md ml-2">ADMIN ONLY</span></h5>
+                        <p class="text-[10px] text-neutral-400 mt-0.5">Customize menus, embed shortcodes, or link the Schedule Planner directly inside your user's <strong>"My Account"</strong> profile page.</p>
+                    </div>
+                </div>
+                <div class="p-1.5 rounded-lg hover:bg-neutral-800 text-neutral-400 hover:text-white transition cursor-pointer">
+                    <i data-lucide="chevron-down" class="w-4.5 h-4.5 arrow-ico transition-transform duration-300"></i>
+                </div>
+            </div>
+            
+            <div id="wp-integration-content" class="hidden mt-4 space-y-5 text-xs text-neutral-300">
+                <p class="text-neutral-400 leading-relaxed font-sans">
+                    To make the Interactive Schedule & Planner accessible throughout the site and custom placements on the <strong>My Account</strong> page, copy and paste these ready-to-use hooks directly into your child-theme's <code class="bg-neutral-950 border border-neutral-850 px-1 py-0.5 rounded font-mono text-red-450 text-[10px]">functions.php</code>:
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Tab 1: WooCommerce My Account integration -->
+                    <div class="bg-neutral-950 border border-neutral-850 p-4 rounded-xl flex flex-col gap-2">
+                        <div class="flex items-center gap-2 border-b border-neutral-850 pb-2 text-[11px] font-bold text-white uppercase tracking-wider font-mono text-red-400">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                            <span>1. Link Planner to "My Account"</span>
+                        </div>
+                        <p class="text-[10px] text-neutral-400">Adds an interactive "🎬 Release Schedule" menu item and direct panel link on WooCommerce's user profiles.</p>
+                        <pre class="bg-black/45 border border-neutral-850 p-2.5 rounded-lg text-[9.5px] font-mono text-neutral-300 overflow-x-auto whitespace-pre select-all">add_filter('woocommerce_account_menu_items', function($items) {
+    $items['release-schedule'] = '🎬 Release Schedule';
+    return $items;
+});
+add_action('init', function() {
+    add_rewrite_endpoint('release-schedule', EP_PAGES);
+});
+add_action('woocommerce_account_release-schedule_endpoint', function() {
+    echo '&lt;h3&gt;Release Schedule Planner&lt;/h3&gt;';
+    echo '&lt;p&gt;View upcoming movie and series trailers in the &lt;a class="button px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white" href="/cinematic-release-schedule/"&gt;Interactive Release Schedule Planner&lt;/a&gt;.&lt;/p&gt;';
+});</pre>
+                    </div>
+
+                    <!-- Tab 2: Programmatically Arrange Menus -->
+                    <div class="bg-neutral-950 border border-neutral-850 p-4 rounded-xl flex flex-col gap-2">
+                        <div class="flex items-center gap-2 border-b border-neutral-850 pb-2 text-[11px] font-bold text-white uppercase tracking-wider font-mono text-red-500">
+                            <i data-lucide="menu" class="w-4 h-4"></i>
+                            <span>2. Arrange Main Navigation Menu</span>
+                        </div>
+                        <p class="text-[10px] text-neutral-400">Reorder custom menus from <em>Appearance -> Menus</em> easily, or copy this hook to prioritize or filter links programmatically.</p>
+                        <pre class="bg-black/45 border border-neutral-850 p-2.5 rounded-lg text-[9.5px] font-mono text-neutral-300 overflow-x-auto whitespace-pre select-all">add_filter('wp_get_nav_menu_items', function($items, $menu) {
+    if ($menu->slug === 'main-menu') {
+        // Customize menu ordering logic programmatically here
+    }
+    return $items;
+}, 10, 2);</pre>
+                    </div>
+                </div>
+
+                <!-- Global Float Shortcode implementation -->
+                <div class="bg-neutral-950 border border-neutral-850 p-4 rounded-xl space-y-2">
+                    <div class="flex items-center gap-2 text-[11px] font-bold text-white uppercase tracking-wider font-mono text-red-400">
+                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                        <span>3. Floating Dock Launcher Shortcode</span>
+                    </div>
+                    <p class="text-[10px] text-neutral-400">Want a persistent shortcut dock throughout the entire site? Paste this shortcode <code class="bg-neutral-900 border border-neutral-800 px-1 py-0.5 rounded text-white">[persistent_planner_dock]</code> into your footer widgets, or add this function to register it globally:</p>
+                    <pre class="bg-black/45 border border-neutral-850 p-3 rounded-lg text-[9.5px] font-mono text-neutral-300 overflow-x-auto whitespace-pre select-all">add_shortcode('persistent_planner_dock', function() {
+    return '&lt;a href="/cinematic-release-schedule/" style="position:fixed;bottom:20px;right:20px;z-index:9999;background:#ef4444;color:#fff;padding:12px 18px;border-radius:50px;font-family:sans-serif;font-size:12px;font-weight:bold;text-decoration:none;box-shadow:0 10px 25px rgba(239,68,68,0.4);"&gt;🎬 View Release Planner&lt;/a&gt;';
+});</pre>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Main Outer Wrapper grid -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10 current-grid">
+
+        <!-- ==================== LEFT COLUMN: INTRO, HEADER ACTIONS, DESK CALENDAR, SMARTPHONE ==================== -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Company/Shortcode Title -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center shadow-md shadow-red-900/40 select-none">
+                    <svg viewBox="0 0 100 100" class="w-5 h-5 fill-white">
+                        <path d="M20,10 L80,10 C85,10 85,25 80,25 L65,25 L65,75 L80,75 C85,75 85,90 80,90 L20,90 C15,90 15,75 20,75 L35,75 L35,25 L20,25 C15,25 15,10 20,10 Z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm font-extrabold tracking-[0.4em] text-neutral-300 font-mono uppercase">INSOMNIACS</span>
+            </div>
+
+            <!-- Page Title -->
+            <div>
+                <h1 class="text-4.5xl md:text-5.5xl font-extrabold tracking-tight text-white leading-none">MOVIES & TV</h1>
+                <h1 class="text-5xl md:text-6.5xl font-black tracking-wide text-red-500 leading-none drop-shadow-[0_4px_12px_rgba(239,68,68,0.35)]">SCHEDULE</h1>
+                <p class="text-neutral-400 text-sm md:text-base mt-4 max-w-sm leading-relaxed">
+                    Interactive cinematic scheduler. Sync schedules directly to your personal planners and track upcoming releases.
+                </p>
+            </div>
+
+            <!-- Navigation Actions Segmented Console -->
+            <div class="grid grid-cols-4 gap-2 bg-neutral-900/45 border border-neutral-800/60 p-3 rounded-2xl">
+                <button onclick="scrollToCalendar()" class="flex flex-col items-center text-center p-2 rounded-xl hover:bg-neutral-850/60 transition-all cursor-pointer group">
+                    <div class="p-2 text-red-500 rounded-lg group-hover:bg-red-950/20 transition-all">
+                        <i data-lucide="layout-grid" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase font-mono tracking-wider">Browse</span>
+                </button>
+
+                <button onclick="openReminderModal()" class="flex flex-col items-center text-center p-2 rounded-xl hover:bg-neutral-850/60 transition-all cursor-pointer group relative">
+                    <div class="p-2 text-red-500 rounded-lg group-hover:bg-red-950/20 transition-all">
+                        <i data-lucide="bell" class="w-4.5 h-4.5"></i>
+                        <span id="reminder-pip" class="absolute top-1 right-2 w-1.5 h-1.5 bg-red-400 rounded-full hidden"></span>
+                    </div>
+                    <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase font-mono tracking-wider">Reminders</span>
+                </button>
+
+                <button onclick="toggleCalendarPanel()" class="flex flex-col items-center text-center p-2 rounded-xl hover:bg-neutral-850/60 transition-all cursor-pointer group relative">
+                    <div class="p-2 text-red-500 rounded-lg group-hover:bg-red-950/20 transition-all">
+                        <i data-lucide="calendar-check" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <span id="calendar-badge" class="absolute top-1.5 right-2 bg-red-600 text-white font-mono text-[9px] font-bold px-1 rounded-full hidden">0</span>
+                    <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase font-mono tracking-wider">Calendar</span>
+                </button>
+
+                <button onclick="toggleFavoritesFilter()" id="favs-btn" class="flex flex-col items-center text-center p-2 rounded-xl hover:bg-neutral-850/60 transition-all cursor-pointer group relative">
+                    <div class="p-2 text-red-500 rounded-lg group-hover:bg-red-950/20 transition-all">
+                        <i data-lucide="heart" id="fav-icon-global" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <span id="favorites-badge" class="absolute top-1.5 right-2 bg-red-650 text-white font-mono text-[9px] font-bold px-1 rounded-full hidden">0</span>
+                    <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase font-mono tracking-wider">Favourites</span>
+                </button>
+            </div>
+
+            <!-- Promotion box banner -->
+            <div class="flex items-center gap-4 bg-gradient-to-r from-red-950/30 to-transparent border border-red-900/25 rounded-2xl p-4">
+                <div class="w-10 h-10 shrink-0 rounded-xl bg-red-950/50 border border-red-900/40 flex items-center justify-center text-red-500 font-mono">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold text-neutral-200 tracking-wide uppercase">STAY AHEAD OF EVERY RELEASE</h5>
+                    <p class="text-[11px] text-neutral-400 mt-0.5">Our direct Google Calendar template pipeline lets you secure coordinates with one tap.</p>
+                </div>
+            </div>
+
+            <!-- ==================== CALENDAR CONTAINER: INTERACTIVE DESK CALENDAR ==================== -->
+            <div class="relative w-full max-w-sm mx-auto" id="desk-calendar-container">
+                <!-- Spindle top spiral rings wire bounds -->
+                <div class="absolute -top-3 left-4 right-4 flex justify-between px-3 z-10">
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                    <div class="flex flex-col items-center"><div class="w-1.5 h-6 bg-gradient-to-b from-neutral-600 via-neutral-400 to-neutral-700 rounded-full shadow-md"></div><div class="w-2.5 h-1 bg-black rounded-full opacity-50 -mt-0.5" ></div></div>
+                </div>
+
+                <!-- Calendar Content Area card -->
+                <div class="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-5 pt-7 text-neutral-100 overflow-hidden relative">
+                    <!-- Gloss sheen surface highlight effect -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-neutral-800/10 to-white/5 pointer-events-none"></div>
+
+                    <!-- Header month/brand labels with premium interactive dynamic controls -->
+                    <div class="flex justify-between items-center mb-5 border-b border-neutral-800 pb-3">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-semibold tracking-wider text-neutral-400 font-mono uppercase">CALENDAR ENGINE</span>
+                            <span class="text-xl font-bold tracking-widest text-red-550 font-mono select-none mt-1" id="calendar-header-month">SCHEDULE</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 z-10">
+                            <button onclick="prevCalendarMonth()" class="p-1 px-1.5 border border-neutral-800 bg-neutral-950/80 hover:bg-neutral-850 text-neutral-400 hover:text-white rounded transition cursor-pointer" title="Previous Month">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="nextCalendarMonth()" class="p-1 px-1.5 border border-neutral-800 bg-neutral-950/80 hover:bg-neutral-850 text-neutral-400 hover:text-white rounded transition cursor-pointer" title="Next Month">
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Week labels Mon to Sun -->
+                    <div class="grid grid-cols-7 text-center gap-1 mb-3 text-neutral-400 font-bold text-[10px] sm:text-xs select-none">
+                        <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div><div>SUN</div>
+                    </div>
+
+                    <!-- Dynamic Calendar Grid Day squares loaded via smart JavaScript -->
+                    <div class="grid grid-cols-7 gap-y-2.5 gap-x-1 text-center font-mono text-xs sm:text-sm" id="calendar-grid-cells"></div>
+
+                    <!-- Selected Day footer dashboard item representation -->
+                    <div id="calendar-selection-footer" class="mt-4 pt-3 border-t border-neutral-800 flex items-center justify-between text-xs hidden">
+                        <span class="text-neutral-400 font-mono uppercase">CALENDAR SIGNAL:</span>
+                        <span id="calendar-selection-movie-name" class="text-white font-bold tracking-wide flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-550 animate-pulse"></span>
+                            <span>NONE</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PHONE PREVIEW GRAPHIC CONTAINER ==================== -->
+            <div class="relative w-full max-w-sm mx-auto bg-neutral-950 border border-neutral-800 rounded-3xl p-3 shadow-xl">
+                <!-- Top Notch Pill -->
+                <div class="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-4 bg-black rounded-full z-15 flex items-center justify-center">
+                    <span class="w-1.5 h-1.5 rounded-full bg-neutral-800"></span>
+                </div>
+
+                <!-- Simulation interface inside frame -->
+                <div class="bg-[#020204] border border-neutral-900 rounded-[22px] overflow-hidden p-4 pt-6 space-y-4 relative">
+                    <div class="flex justify-between items-center text-[10px] font-mono text-neutral-500 select-none">
+                        <span>INSOMNIAC BROADCAST</span>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span>
+                            <span>LIVE SYNC</span>
+                        </div>
+                    </div>
+
+                    <!-- Inner reactive countdown details container -->
+                    <div id="phone-dynamic-card" class="space-y-3"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== RIGHT COLUMN: DYNAMIC LIST GRIDS, FILTER CARDS, SEARCH BAR ==================== -->
+        <div class="lg:col-span-7 flex flex-col gap-5">
+            
+            <!-- Filters & Category segments selection row -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center pb-4 border-b border-neutral-900">
+                <div class="flex items-center gap-2">
+                    <div class="p-1 px-2.5 rounded-lg bg-red-950/20 border border-red-900/30 text-red-500">
+                        <i data-lucide="calendar-days" class="w-4 h-4"></i>
+                    </div>
+                    <h2 class="text-lg md:text-xl font-bold text-white tracking-widest font-mono uppercase">COMING RELEASES</h2>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-1.5" id="format-filters">
+                    <button onclick="setFilterType('ALL')" id="filter-all" class="px-3 py-1.5 rounded-xl border text-[11px] font-bold tracking-wider transition-all bg-red-600/10 border-red-650 text-red-500 cursor-pointer active-format">ALL FORMATS</button>
+                    <button onclick="setFilterType('Movie')" id="filter-movie" class="px-3 py-1.5 rounded-xl border text-[11px] font-bold tracking-wider transition-all bg-neutral-950/50 border-neutral-900 text-neutral-400 hover:text-neutral-200 cursor-pointer inactive-format">MOVIES</button>
+                    <button onclick="setFilterType('TV Series')" id="filter-tv" class="px-3 py-1.5 rounded-xl border text-[11px] font-bold tracking-wider transition-all bg-neutral-950/50 border-neutral-900 text-neutral-400 hover:text-neutral-200 cursor-pointer inactive-format">TV SERIES</button>
+                </div>
+            </div>
+
+            <!-- Enhanced Search block -->
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="search-input"
+                    oninput="handleSearch(this.value)"
+                    placeholder="Search release titles, genres, creators or cast members..." 
+                    class="w-full bg-neutral-900/40 border border-neutral-850 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition placeholder-neutral-500 text-neutral-100 font-sans"
+                >
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500">
+                    <i data-lucide="search" class="w-4.5 h-4.5"></i>
+                </div>
+                <button onclick="clearSearch()" id="search-clear-btn" class="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white hidden transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Dynamic Release Cards List container -->
+            <div class="space-y-4" id="release-cards-list"></div>
+
+            <!-- Curated Pagination UI Component -->
+            <div id="release-cards-pagination" class="flex justify-center items-center mt-3"></div>
+
+            <!-- Curated totals dynamic footline dashboard info -->
+            <div class="p-4 bg-neutral-950/45 border border-neutral-900 rounded-2xl flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mt-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                    <span class="text-xs text-neutral-400">
+                        You curated <strong id="fav-count-meta" class="text-white font-mono">0</strong> favorites and scheduled <strong id="add-count-meta" class="text-white font-mono">0</strong> upcoming releases.
+                    </span>
+                </div>
+                <button onclick="toggleCalendarPanel()" class="text-xs font-bold text-red-500 hover:text-red-400 uppercase tracking-wider flex items-center gap-1 cursor-pointer font-mono">
+                    <span>OPEN SYSTEM PLANNER</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 mt-0.5"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==================== SLIDEOUT & DRAWER CONTROL SYSTEM ==================== -->
+
+    <!-- 1. INTEGRATED SIDEBAR CALENDAR / PLANNING DRAWER -->
+    <div id="calendar-drawer" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex justify-end">
+        <div class="w-full max-w-md bg-neutral-950 border-l border-neutral-850 p-6 md:p-8 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="calendar-drawer-board">
+            
+            <div>
+                <div class="flex justify-between items-center pb-4 border-b border-neutral-800">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="calendar" class="text-red-500 w-5 h-5"></i>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wider">Release Planner</h3>
+                    </div>
+                    <button onclick="toggleCalendarPanel()" class="p-1 px-2 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-900 cursor-pointer">
+                        <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                    </button>
+                </div>
+
+                <p class="text-xs text-neutral-400 mt-3 mb-5 leading-relaxed">
+                    The following upcoming cinematics have been registered to your personal active release plan. Trigger Google Calendar API synchronization template tags instantly.
+                </p>
+
+                <!-- Plan nodes dynamically loaded -->
+                <div id="drawer-items-list" class="space-y-3 overflow-y-auto max-h-[60vh] pr-1"></div>
+            </div>
+
+            <!-- Drawer actions desk footer -->
+            <div id="drawer-footer-controls" class="pt-4 border-t border-neutral-850 mt-4 space-y-3">
+                <div class="flex justify-between items-center text-xs text-neutral-400">
+                    <span class="font-mono">TOTAL TRACKED:</span>
+                    <span id="drawer-total-indicator" class="text-white font-mono font-bold">0</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="clearAllCalendarItems()" class="px-3.5 py-3 border border-neutral-850 text-neutral-400 hover:bg-neutral-900 rounded-xl text-xs font-bold hover:text-white transition uppercase font-mono">CLEAR ALL</button>
+                    <button onclick="triggerSynchronize()" class="flex-1 py-3 bg-red-650 text-white font-bold rounded-xl text-xs hover:bg-red-500 shadow-md flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer font-mono">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        <span id="sync-btn-text">SYNC PLANNERS</span>
+                    </button>
+                </div>
+                <p class="text-[9px] text-neutral-500 text-center select-none font-mono tracking-wide">
+                    SECURED COORDINATES BROADCAST NODE SYNC ACTIVE
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. SUBSCRIPTION / NOTIFICATION ALERT REQUEST FORM MODAL -->
+    <div id="reminder-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-neutral-900 border border-neutral-850 rounded-3xl p-6 shadow-2xl overflow-hidden modal-open-anim">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-red-550 to-red-800"></div>
+
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-red-950/40 rounded-2xl border border-red-900/30 text-red-500">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wider">Set Release Alert</h3>
+                        <p class="text-neutral-400 text-xs">Stay synchronized 24 hours prior</p>
+                    </div>
+                </div>
+                <button onclick="closeReminderModal()" class="p-1 px-2 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-855 cursor-pointer">
+                    <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                </button>
+            </div>
+
+            <div id="reminder-form-container">
+                <form onsubmit="handleReminderSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest font-mono text-neutral-400 mb-1.5">Select Premiere</label>
+                        <select id="reminder-movie-select" class="w-full bg-neutral-950 text-neutral-200 border border-neutral-805 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:border-red-650 transition font-mono"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest font-mono text-neutral-400 mb-1.5">Subscriber Name</label>
+                        <input type="text" id="reminder-name" required placeholder="E.g., Bruce Wayne" class="w-full bg-neutral-950 text-neutral-200 border border-neutral-805 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:border-red-650 placeholder-neutral-600 transition font-sans">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest font-mono text-neutral-400 mb-1.5">Email Coordinates</label>
+                        <div class="relative">
+                            <input type="email" id="reminder-email" required placeholder="E.g., bruce@waynecorp.com" class="w-full bg-neutral-950 text-neutral-200 border border-neutral-805 rounded-xl pl-10 pr-3.5 py-3 text-sm focus:outline-none focus:border-red-655 placeholder-neutral-600 transition font-sans">
+                            <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500">
+                                <i data-lucide="mail" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-neutral-950/60 p-3.5 rounded-xl border border-neutral-805 text-[11px] text-neutral-400 flex items-start gap-2 select-none">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-red-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold text-neutral-200">Transmission Node:</span> Receive custom details coordinates 24 hours prior and immediately at active launch.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-sm shadow-md active:scale-95 transition-all font-mono">ACTIVATE REMINDER</button>
+                </form>
+            </div>
+
+            <!-- Success alert notification screen -->
+            <div id="reminder-success-container" class="hidden flex flex-col items-center justify-center py-6 text-center">
+                <div class="w-16 h-16 bg-emerald-950/50 border border-emerald-500/35 rounded-full flex items-center justify-center text-emerald-400 mb-4 shadow-[0_0_20px_rgba(16,185,129,0.3)] select-none">
+                    <i data-lucide="check" class="w-8 h-8"></i>
+                </div>
+                <h4 class="text-sm font-extrabold text-white uppercase tracking-wider">Alert Registered</h4>
+                <p class="text-neutral-300 text-xs mt-2 max-w-xs leading-relaxed">
+                    Cinematic alert activated! A notification reminder is scheduled to be dispatched to:
+                </p>
+                <p class="text-emerald-400 font-bold font-mono text-xs mt-2.5 bg-emerald-900/10 border border-emerald-900/35 px-4 py-1.5 rounded-lg">
+                    <span id="success-email-target">user@email.com</span>
+                </p>
+                
+                <div class="w-full mt-6">
+                    <button onclick="closeReminderModal()" class="w-full py-3 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 border border-neutral-750/50 rounded-xl text-xs font-bold transition uppercase tracking-widest cursor-pointer active:scale-95">
+                        Dismiss
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 4. STREAMING CINEMATIC TRAILER LIGHTBOX MODAL -->
+    <div id="trailer-modal" class="fixed inset-0 z-[1000002] bg-black/95 backdrop-blur-lg hidden flex items-center justify-center p-4 shadow-3xl" onclick="closeTrailerModal()">
+        <div class="relative w-full max-w-4xl aspect-video overflow-hidden bg-neutral-950 border border-neutral-850 rounded-2xl shadow-[0_0_80px_rgba(239,68,68,0.30)] modal-open-anim" onclick="event.stopPropagation()">
+            <button onclick="event.stopPropagation(); closeTrailerModal();" class="absolute top-4 right-4 z-50 p-2 bg-black/80 border border-neutral-800 text-neutral-400 hover:text-white rounded-full transition-colors cursor-pointer" title="Close Trailer">
+                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+            </button>
+            <div class="w-full h-full font-sans text-white" id="trailer-video-container"></div>
+        </div>
+    </div>
+
+    <!-- 3. DETAILED CONTENT DESCRIPTION & SPECS BIG MODAL -->
+    <div id="details-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4 shadow-3xl" onclick="closeDetailsModal()">
+        <div class="relative w-full max-w-3xl overflow-hidden bg-neutral-950 border border-neutral-850 rounded-3xl shadow-[0_0_50px_rgba(239,68,68,0.2)] modal-open-anim" onclick="event.stopPropagation()">
+            
+            <!-- Graphic Linear Gradient Billboard header backdrop -->
+            <div id="modal-banner" class="h-44 w-full relative flex items-end p-6">
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/30 to-transparent pointer-events-none"></div>
+                <div class="relative z-10">
+                    <span id="modal-banner-type" class="inline-block px-2.5 py-1 text-[9.5px] leading-none font-black rounded-full font-mono tracking-widest uppercase cursor-pointer select-none border movie-badge-glow">MOVIE</span>
+                    <h2 class="text-2.5xl md:text-3xl font-extrabold text-white tracking-widest mt-1.5 font-sans leading-snug">
+                        <a id="modal-banner-title" href="#" target="_blank" class="hover:underline hover:text-red-400 transition-colors">TITLE</a>
+                    </h2>
+                    <p id="modal-banner-tagline" class="text-neutral-300 text-xs md:text-sm italic font-light max-w-lg mt-0.5">"Film Tagline Line"</p>
+                </div>
+                <button onclick="event.stopPropagation(); closeDetailsModal();" class="absolute top-4 right-4 z-50 p-2 bg-neutral-900/80 border border-neutral-800 text-neutral-400 hover:text-white rounded-full transition-colors cursor-pointer" title="Close Details">
+                    <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                </button>
+            </div>
+
+            <!-- specs grid -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto max-h-[70vh]">
+                
+                <!-- Left panel: visual mini-card -->
+                <div class="md:col-span-1 flex flex-col gap-4">
+                    <div id="modal-preview-poster" class="aspect-[3/4] rounded-2xl p-4 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/15 pointer-events-none"></div>
+                        <div class="flex justify-between items-start z-10">
+                            <span id="modal-poster-rating" class="bg-black/70 border border-white/10 px-2 py-0.5 rounded text-[9px] font-mono font-bold text-white uppercase font-sans">PG-13</span>
+                            <div class="flex items-center gap-1 bg-black/85 px-1.5 py-0.5 rounded text-yellow-405 text-xs font-bold border border-yellow-500/20 font-mono">
+                                <span class="text-[9px] text-yellow-400">★</span>
+                                <span id="modal-poster-score" class="text-white">9.2</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center items-center h-28 my-auto z-10 select-none opacity-90 text-center">
+                            <span id="modal-poster-text-logo" class="text-xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.85)] truncate max-w-[150px] uppercase font-sans">TITLE</span>
+                        </div>
+                        
+                        <div class="z-10 bg-black/85 border border-neutral-850 p-2 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[8px] text-neutral-500 font-mono">RELEASE </p>
+                                <p id="modal-poster-releasedate" class="text-xs font-bold text-white font-mono">20 JUN</p>
+                            </div>
+                            <i data-lucide="calendar" class="w-4.5 h-4.5 text-red-500"></i>
+                        </div>
+                    </div>
+
+                    <div id="modal-actions-bar" class="flex gap-2"></div>
+                </div>
+
+                <!-- Right panel: specs/synopsis -->
+                <div class="md:col-span-2 flex flex-col gap-5">
+                    <div>
+                        <h4 class="text-xs uppercase tracking-widest font-mono text-neutral-450 mb-2 font-bold flex items-center gap-2">
+                            <i data-lucide="notebook" class="w-3.5 h-3.5 text-red-500"></i>
+                            <span>STORYLINE SINOPSIS</span>
+                        </h4>
+                        <p id="modal-details-plot" class="text-neutral-300 text-sm leading-relaxed"></p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5" id="modal-details-chips"></div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-neutral-900">
+                        <div>
+                            <h5 id="modal-details-director-label" class="text-[10px] uppercase tracking-wider font-mono text-neutral-500 font-bold mb-1 flex items-center gap-1.5 uppercase">
+                                <i data-lucide="flame" class="w-3.5 h-3.5 text-red-500 font-mono"></i>
+                                <span>DIRECTOR</span>
+                            </h5>
+                            <p id="modal-details-director-val" class="text-white text-sm font-semibold font-sans">Name</p>
+                        </div>
+                        <div>
+                            <h5 class="text-[10px] uppercase tracking-wider font-mono text-neutral-500 font-bold mb-1 flex items-center gap-1.5">
+                                <i data-lucide="users" class="w-3.5 h-3.5 text-red-500"></i>
+                                <span>STARRING</span>
+                            </h5>
+                            <p id="modal-details-star-val" class="text-neutral-350 text-xs font-medium font-sans">Stars</p>
+                        </div>
+                    </div>
+
+                    <!-- Trivia -->
+                    <div id="modal-details-trivia-block" class="pt-3 border-t border-neutral-900">
+                        <h4 class="text-xs uppercase tracking-widest font-mono text-neutral-450 mb-2 font-bold flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-3.5 h-3.5 text-red-500"></i>
+                            <span>PRODUCTION TRIVIA</span>
+                        </h4>
+                        <ul id="modal-details-trivia-list" class="list-disc pl-4 space-y-1.5 text-xs text-neutral-400 font-sans"></ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 4. FLOATING SYSTEM ACTION TOAST ALERTS -->
+    <div id="system-toast" class="fixed bottom-6 right-6 z-55 bg-neutral-950 border border-red-900/50 rounded-2xl p-4 shadow-2xl flex items-center gap-3 max-w-sm hidden transition">
+        <div class="p-2 bg-red-950/40 rounded-xl border border-red-900/45 text-red-400">
+            <i data-lucide="sparkles" class="w-4.5 h-4.5 animate-pulse"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p id="toast-text-msg" class="text-xs text-neutral-200 leading-snug font-medium font-sans"></p>
+        </div>
+        <button onclick="dismissToast()" class="text-neutral-500 hover:text-white cursor-pointer ml-1">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+
+</div>
+
+<!-- ==================== WEB APP DESK INTELLIGENCE SCRIPT ==================== -->
+<script>
+    // 1. Injected dynamic WordPress releases 
+    const SCHEDULE_ITEMS = <?php echo json_encode( $posts_data, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>;
+    
+    // 2. Local State Management (Syncing Favorites/Calendar local variables)
+    let favoritedIds = JSON.parse(localStorage.getItem('standalone_fav')) || [];
+    let scheduledIds = JSON.parse(localStorage.getItem('standalone_scheduled')) || [];
+    let registeredRemindersCount = JSON.parse(localStorage.getItem('standalone_reminder_count')) || 0;
+    
+    // Import DB cookies into default client memory if present
+    const idc_favs_cookie = "<?php echo isset($_COOKIE['idc_favs']) ? esc_attr($_COOKIE['idc_favs']) : ''; ?>";
+    if (idc_favs_cookie) {
+        const parsedCookieFavs = idc_favs_cookie.split(',');
+        parsedCookieFavs.forEach(id => {
+            if (id && !favoritedIds.includes(id)) {
+                favoritedIds.push(id);
+            }
+        });
+    }
+
+    let activeFilterType = 'ALL';
+    let searchQuery = '';
+    let currentFocusedItem = SCHEDULE_ITEMS.length > 0 ? SCHEDULE_ITEMS[0] : null;
+    let toastTimeout = null;
+
+    // Teaser smartphone state simulations
+    let phonePlaying = false;
+    let phoneVolume = true;
+
+    // Pagination state
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Calendar Engine dynamic browsing state
+    let displayedCalendarMonth = currentFocusedItem ? (currentFocusedItem.monthNum - 1) : (new Date()).getMonth();
+    let displayedCalendarYear = currentFocusedItem ? currentFocusedItem.year : (new Date()).getFullYear();
+
+    // Dynamically browse to previous month in Calendar Engine
+    function prevCalendarMonth() {
+        displayedCalendarMonth--;
+        if (displayedCalendarMonth < 0) {
+            displayedCalendarMonth = 11;
+            displayedCalendarYear--;
+        }
+        renderCalendar();
+        lucide.createIcons();
+    }
+
+    // Dynamically browse to next month in Calendar Engine
+    function nextCalendarMonth() {
+        displayedCalendarMonth++;
+        if (displayedCalendarMonth > 11) {
+            displayedCalendarMonth = 0;
+            displayedCalendarYear++;
+        }
+        renderCalendar();
+        lucide.createIcons();
+    }
+
+    // 3. Render Desk Spiral Wirebound Calendar Grid Coordinates dynamically
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid-cells');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        // If no items exist, exit gracefully
+        if (SCHEDULE_ITEMS.length === 0) {
+            grid.innerHTML = '<div class="col-span-7 py-8 text-neutral-600 text-xs text-center font-mono uppercase">Empty Grid</div>';
+            return;
+        }
+
+        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const activeMonthName = monthNames[displayedCalendarMonth];
+        
+        // Update header block title
+        const calendarHeaderLabel = document.getElementById('calendar-header-month');
+        if (calendarHeaderLabel) {
+            calendarHeaderLabel.innerText = `${activeMonthName} ${displayedCalendarYear}`;
+        }
+
+        const firstDayOfMonth = new Date(displayedCalendarYear, displayedCalendarMonth, 1);
+        let startDayOffset = firstDayOfMonth.getDay() - 1; // Mon offset (0: Mon, 6: Sun)
+        if (startDayOffset < 0) startDayOffset = 6;
+
+        const daysInMonth = new Date(displayedCalendarYear, displayedCalendarMonth + 1, 0).getDate();
+        const daysInPrevMonth = new Date(displayedCalendarYear, displayedCalendarMonth, 0).getDate();
+
+        const cells = [];
+
+        // Prepend previous grayed-out dates
+        for (let i = startDayOffset - 1; i >= 0; i--) {
+            cells.push({ day: daysInPrevMonth - i, current: false, movieId: null });
+        }
+
+        // Add current month days
+        for (let d = 1; d <= daysInMonth; d++) {
+            // Check if any registered item lands exactly on this date
+            const checkDateStr = `${displayedCalendarYear}-${String(displayedCalendarMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            const matchedItem = SCHEDULE_ITEMS.find(item => item.originalReleaseDate === checkDateStr);
+            
+            cells.push({
+                day: d,
+                current: true,
+                movieId: matchedItem ? matchedItem.id : null
+            });
+        }
+
+        // Append padding dates
+        const totalCellsNeeded = Math.ceil(cells.length / 7) * 7;
+        let nextMonthDay = 1;
+        while (cells.length < totalCellsNeeded) {
+            cells.push({ day: nextMonthDay++, current: false, movieId: null });
+        }
+
+        // Render each cell block
+        cells.forEach(item => {
+            const cell = document.createElement('div');
+            cell.className = `aspect-square flex items-center justify-center relative select-none rounded-full cursor-pointer transition-all duration-300`;
+            
+            const cellText = document.createElement('span');
+            cellText.className = `text-xs z-10 font-mono ${item.current ? 'text-neutral-300' : 'text-neutral-600'} ${item.movieId ? 'font-bold text-white' : ''}`;
+            cellText.innerText = item.day;
+            cell.appendChild(cellText);
+
+            if (item.movieId) {
+                const isSelected = currentFocusedItem && currentFocusedItem.id === item.movieId;
+                
+                const marker = document.createElement('div');
+                marker.className = `absolute inset-0.5 rounded-full border-2 transition-all duration-300 ${isSelected ? 'bg-red-650/25 border-red-500 scale-110 shadow-[0_0_10px_rgba(239,68,68,0.4)]' : 'border-red-650/40 hover:border-red-500 hover:bg-neutral-800/30'}`;
+                cell.appendChild(marker);
+
+                cell.onclick = () => {
+                    const found = SCHEDULE_ITEMS.find(f => f.id === item.movieId);
+                    if (found) {
+                        setFocusedItem(found);
+                    }
+                };
+
+                // Floating mini-tooltip descriptions
+                const tooltip = document.createElement('div');
+                const filmObj = SCHEDULE_ITEMS.find(f => f.id === item.movieId);
+                tooltip.className = 'absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-32 hidden group-hover:block z-30 pointer-events-none scale-90 transition-all';
+                tooltip.innerHTML = `
+                    <div class="bg-black border border-red-950 rounded px-2 py-1 text-[9px] text-center text-white shadow-xl">
+                        <p class="font-bold text-red-400 truncate uppercase font-sans">${filmObj.title}</p>
+                        <p class="text-[8px] text-neutral-400 capitalize font-mono">${filmObj.type} • ${filmObj.displayDate}</p>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-black border-r border-b border-red-900 rotate-45 mx-auto -mt-1"></div>
+                `;
+                cell.className += ' group';
+                cell.appendChild(tooltip);
+            }
+
+            grid.appendChild(cell);
+        });
+
+        // Update active selection bottom labels description
+        const calendarFooter = document.getElementById('calendar-selection-footer');
+        const footerMovieSpan = document.getElementById('calendar-selection-movie-name');
+        if (calendarFooter && footerMovieSpan && currentFocusedItem) {
+            calendarFooter.classList.remove('hidden');
+            footerMovieSpan.innerHTML = `<a href="${currentFocusedItem.permalink || '#'}" target="_blank" onclick="event.stopPropagation(); if (this.getAttribute('href') && this.getAttribute('href') !== '#') { window.open(this.getAttribute('href'), '_blank'); } return false;" class="hover:underline hover:text-red-500 transition-colors">${currentFocusedItem.title}</a>`;
+        } else if (calendarFooter) {
+            calendarFooter.classList.add('hidden');
+        }
+    }
+
+    // 4. Render Smartphone Mockup reactive live sync screens
+    function renderSmartphone() {
+        const phoneCard = document.getElementById('phone-dynamic-card');
+        if (!phoneCard) return;
+
+        if (!currentFocusedItem) {
+            phoneCard.innerHTML = `<div class="text-center py-8 text-xs text-neutral-500 font-mono">Awaiting Sync Transmission Node...</div>`;
+            return;
+        }
+
+        const imageBackgroundStyle = currentFocusedItem.thumb 
+            ? `background-image: url('${currentFocusedItem.thumb}'); background-size: cover; background-position: center;` 
+            : `background: ${currentFocusedItem.posterGradient};`;
+
+        // Calculate dynamic real countdown metrics
+        const releaseDateTime = new Date(currentFocusedItem.originalReleaseDate).getTime();
+        const difference = releaseDateTime - new Date().getTime();
+        
+        let days = 0, hours = 0, mins = 0;
+        if (difference > 0) {
+            days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            mins = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        } else {
+            // Already released or default placeholder countdown values
+            days = 0;
+            hours = 0;
+            mins = 0;
+        }
+
+        phoneCard.innerHTML = `
+            <div class="space-y-3">
+                <div class="aspect-[16/9] w-full rounded-xl relative overflow-hidden flex items-end p-3 transition-all duration-500" style="${imageBackgroundStyle}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent pointer-events-none"></div>
+                    
+                    <div class="relative z-10 w-full flex justify-between items-end">
+                        <div>
+                            <span class="inline-block text-[8px] px-1.5 py-0.5 rounded uppercase tracking-widest font-mono cursor-pointer pointer-events-auto select-none border ${currentFocusedItem.type === 'Movie' ? 'movie-badge-glow' : 'tv-badge-glow'}" onclick="event.stopPropagation(); setFilterType('${currentFocusedItem.type}')">${currentFocusedItem.type}</span>
+                            <h4 class="text-[11px] font-black text-white uppercase tracking-wider line-clamp-1 mt-1 font-sans">
+                                <a href="${currentFocusedItem.permalink || '#'}" target="_blank" onclick="event.stopPropagation(); if (this.getAttribute('href') && this.getAttribute('href') !== '#') { window.open(this.getAttribute('href'), '_blank'); } return false;" class="hover:underline hover:text-red-400 transition-colors">${currentFocusedItem.title}</a>
+                            </h4>
+                        </div>
+
+                        <button onclick="event.stopPropagation(); playTrailer('${currentFocusedItem.trailerUrl || ''}', '${currentFocusedItem.title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white cursor-pointer hover:bg-red-500 hover:scale-105 transition shadow-lg shrink-0" title="Watch Trailer">
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-white text-white ml-0.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Numerical Countdown Grid -->
+                <div class="grid grid-cols-3 gap-1 bg-neutral-950 p-2 rounded-xl text-center font-mono border border-neutral-900">
+                    <div>
+                        <p class="text-sm font-bold text-white">${days}</p>
+                        <p class="text-[8px] text-neutral-500 font-semibold uppercase font-mono">DAYS</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-white">${hours}</p>
+                        <p class="text-[8px] text-neutral-500 font-semibold uppercase font-mono">HOURS</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-white">${mins}</p>
+                        <p class="text-[8px] text-neutral-500 font-semibold uppercase font-mono">MINS</p>
+                    </div>
+                </div>
+
+                <!-- Soundtrack audio ticker simulation -->
+                <div class="flex justify-between items-center bg-neutral-900/40 p-2 border border-neutral-900 rounded-xl select-none">
+                    <span class="text-[9px] text-neutral-400 font-mono">Broadcast Teaser Audio</span>
+                    <button onclick="togglePhoneVolume()" class="text-neutral-500 hover:text-white cursor-pointer">
+                        <i data-lucide="${phoneVolume ? 'volume-2' : 'volume-x'}" class="w-3.5 h-3.5 ${phoneVolume ? 'text-red-400' : 'text-neutral-500'}"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        lucide.createIcons();
+    }
+
+    function togglePhonePlay() {
+        phonePlaying = !phonePlaying;
+        summonToast(phonePlaying ? "Sync Audio Teaser Stream starting..." : "Streaming paused.");
+        renderSmartphone();
+    }
+
+    function togglePhoneVolume() {
+        phoneVolume = !phoneVolume;
+        summonToast(phoneVolume ? "Smartphone audio output enabled." : "Audio output muted.");
+        renderSmartphone();
+    }
+
+    // 5. Render Movies & TV Schedule Cards on Right Container
+    function renderReleaseCards() {
+        const container = document.getElementById('release-cards-list');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (SCHEDULE_ITEMS.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-20 bg-neutral-900/10 rounded-3xl border border-dashed border-neutral-850">
+                    <p class="text-sm font-semibold text-neutral-400 font-sans">No releases found in database.</p>
+                </div>
+            `;
+            const pagContainer = document.getElementById('release-cards-pagination');
+            if (pagContainer) pagContainer.innerHTML = '';
+            return;
+        }
+
+        // Apply Search details & dynamic case-insensitive/space-insensitive category taxonomy checks
+        const filtered = SCHEDULE_ITEMS.filter(item => {
+            const q = searchQuery.toLowerCase();
+            const matchesSearch = (item.title ? item.title.toLowerCase().includes(q) : false) || 
+                                  (item.description ? item.description.toLowerCase().includes(q) : false);
+            
+            let matchesType = false;
+            if (activeFilterType === 'ALL') {
+                matchesType = true;
+            } else if (activeFilterType === 'FAVORITES') {
+                matchesType = favoritedIds.includes(item.id);
+            } else if (activeFilterType === 'Movie') {
+                // Matches only your movie post type
+                matchesType = (item.post_type === 'ht_movie');
+            } else if (activeFilterType === 'TV Series') {
+                // Matches both of your TV post types
+                matchesType = (item.post_type === 'ht_show' || item.post_type === 'ht_tv_show');
+            }
+            return matchesSearch && matchesType;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-16 bg-neutral-900/10 rounded-3xl border border-dashed border-neutral-850">
+                    <p class="text-sm font-semibold text-neutral-400">No releases matches filter criteria.</p>
+                    <button onclick="resetFilters()" class="mt-3 text-xs bg-red-600/10 border border-red-900/30 text-red-400 px-4 py-2 rounded-xl font-bold cursor-pointer hover:bg-red-600/20 font-mono">
+                        RESET COORDS
+                    </button>
+                </div>
+            `;
+            const pagContainer = document.getElementById('release-cards-pagination');
+            if (pagContainer) pagContainer.innerHTML = '';
+            return;
+        }
+
+        // Pagination limit calculations
+        const totalItems = filtered.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedItems = filtered.slice(startIndex, endIndex);
+
+        paginatedItems.forEach(item => {
+            const isFav = favoritedIds.includes(item.id);
+            const isScheduled = scheduledIds.includes(item.id);
+            const isFocused = currentFocusedItem && currentFocusedItem.id === item.id;
+
+            const card = document.createElement('div');
+            card.id = `release-card-${item.id}`;
+            card.className = `relative flex flex-col sm:flex-row gap-4 border rounded-2xl p-4 cursor-pointer group transition-all duration-300 ${isFocused ? 'release-card-focused' : 'release-card-normal'}`;
+            card.onclick = () => {
+                setFocusedItem(item);
+                openDetailsModal(item.id);
+            };
+
+            // Fetch custom thumbnail from post attachments or fall back to gradient graphics
+            const imageBackgroundStyle = item.thumb ? `background-image: url('${item.thumb}'); background-size: cover; background-position: center;` : `background: ${item.posterGradient};`;
+
+            card.innerHTML = `
+                <!-- Graphic Poster Panel with hover watch trigger -->
+                <div class="w-full sm:w-40 md:w-48 aspect-[16/9] sm:aspect-[4/3] rounded-xl overflow-hidden relative p-3 flex flex-col justify-between shrink-0 group/poster cursor-pointer" style="${imageBackgroundStyle}" onclick="event.stopPropagation(); playTrailer('${item.trailerUrl || ''}', '${item.title.replace(/'/g, "\\'")}')" title="Play Trailer">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover/poster:opacity-100 flex flex-col gap-1 items-center justify-center transition-all duration-300 z-20 backdrop-blur-[2px]">
+                        <div class="w-10 h-10 rounded-full bg-red-650 flex items-center justify-center text-white shadow-xl scale-95 group-hover/poster:scale-100 transition-all duration-300 active:scale-90">
+                            <i data-lucide="play" class="w-4 h-4 fill-white text-white ml-0.5 animate-pulse"></i>
+                        </div>
+                        <span class="text-[8px] font-mono tracking-[0.2em] text-neutral-300 uppercase font-black">PLAY TRAILER</span>
+                    </div>
+
+                    <div class="absolute inset-0 bg-black/35 pointer-events-none group-hover/poster:opacity-0 transition-opacity"></div>
+
+                    <div class="flex justify-between items-start z-10 pointer-events-none">
+                        <span class="bg-black/85 border border-white/5 px-2 py-0.5 rounded text-[8px] font-mono font-bold text-white uppercase tracking-wider">${item.rating}</span>
+                        <div class="flex items-center gap-0.5 bg-black/75 px-1.5 py-0.5 rounded text-yellow-550 text-[9px] font-bold border border-yellow-500/10 font-mono">
+                            <span class="text-yellow-405">★</span>
+                            <span class="text-white">${item.score}</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Central Text logo fallback if upload image empty -->
+                    <div class="text-center font-extrabold text-white text-base tracking-tight select-none z-10 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] leading-tight uppercase font-sans ${item.thumb ? 'hidden group-hover/poster:block' : ''}">
+                        ${item.title.split(':')[0]}
+                    </div>
+
+                    <div class="z-10 flex gap-1 items-center overflow-hidden pointer-events-none group-hover/poster:hidden transition-all duration-300">
+                        <span class="text-[8px] truncate px-1.5 py-0.5 rounded-full bg-black/60 text-neutral-200 border border-white/5 font-mono">${item.genre[0]} • ${item.duration}</span>
+                    </div>
+                </div>
+
+                <!-- Core Details specs -->
+                <div class="flex-1 min-w-0 flex flex-col justify-center gap-2">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-block px-2.5 py-1 text-[9.5px] leading-none font-black rounded-full border tracking-widest font-mono select-none cursor-pointer pointer-events-auto ${
+                                item.type === 'Movie' ? 'movie-badge-glow' : 'tv-badge-glow'
+                            }" onclick="event.stopPropagation(); setFilterType('${item.type}')">
+                                ${item.type}
+                            </span>
+                            <span class="text-neutral-700 font-mono">•</span>
+                            <span class="text-[10px] text-neutral-450 font-medium font-mono">${item.genre.slice(0, 2).join(' / ')}</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white tracking-wide mt-1 uppercase font-sans leading-snug group-hover:text-red-450 transition-colors">
+                            <a href="${item.permalink || '#'}" target="_blank" onclick="event.stopPropagation(); if (this.getAttribute('href') && this.getAttribute('href') !== '#') { window.open(this.getAttribute('href'), '_blank'); } return false;" class="hover:underline hover:text-red-500 transition-colors">${item.title}</a>
+                        </h3>
+                    </div>
+                    <div class="text-neutral-400 text-xs line-clamp-2 leading-relaxed">"${item.tagline || item.description}"</div>
+                </div>
+
+                <!-- Right schedule control block -->
+                <div class="w-full sm:w-auto sm:min-w-[130px] border-t sm:border-t-0 sm:border-l border-neutral-900 pt-3 sm:pt-0 sm:pl-4 flex flex-row sm:flex-col justify-between items-center sm:items-end gap-3 shrink-0">
+                    <div class="flex items-center gap-3 text-right select-none font-mono">
+                        <div class="flex flex-col items-end">
+                            <span class="text-2.5xl sm:text-3.5xl font-extrabold text-white leading-none font-mono">${item.day}</span>
+                            <span class="text-[11px] font-extrabold text-red-500 uppercase tracking-widest leading-none mt-1 font-mono">${item.month}</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-red-950/20 border border-red-955/45 flex items-center justify-center text-red-500">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 flex-wrap xs:flex-nowrap justify-end" onclick="event.stopPropagation()">
+                        <button onclick="toggleScheduleItem('${item.id}')" class="px-2.5 sm:px-3 py-2 text-[10px] font-black rounded-lg border flex items-center gap-1 transition-all cursor-pointer ${isScheduled ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300' : 'bg-neutral-950/85 border-neutral-805 text-neutral-300 hover:border-neutral-700 hover:bg-neutral-900'}">
+                            ${isScheduled 
+                                ? `<i data-lucide="check" class="w-3 h-3 text-emerald-400 shrink-0"></i> <span>ADDED</span>` 
+                                : `<i data-lucide="plus" class="w-3 h-3 shrink-0"></i> <span>CALENDAR</span>`
+                            }
+                        </button>
+
+                        <button onclick="toggleFavoriteItem('${item.id}')" class="p-2 rounded-lg border transition-all cursor-pointer ${isFav ? 'bg-red-950/30 border-red-500/35 text-red-500' : 'bg-neutral-950/85 border-neutral-805 text-neutral-450 hover:border-neutral-600 hover:bg-neutral-900'}">
+                            <i data-lucide="heart" class="w-3 h-3 ${isFav ? 'fill-red-500 text-red-500' : ''}"></i>
+                        </button>
+
+                        <button onclick="openDetailsModal('${item.id}')" class="p-2 bg-neutral-950/85 border border-neutral-850 hover:border-red-905 text-neutral-405 hover:text-red-400 rounded-lg transition-all" title="View details">
+                            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+        // Dynamic pagination controllers
+        renderPagination(totalPages);
+
+        // Sync visual telemetry indicators
+        document.getElementById('fav-count-meta').innerText = favoritedIds.length;
+        document.getElementById('add-count-meta').innerText = scheduledIds.length;
+        
+        const favBadge = document.getElementById('favorites-badge');
+        if (favBadge) {
+            favBadge.innerText = favoritedIds.length;
+            if (favoritedIds.length > 0) favBadge.classList.remove('hidden');
+            else favBadge.classList.add('hidden');
+        }
+
+        const calBadge = document.getElementById('calendar-badge');
+        if (calBadge) {
+            calBadge.innerText = scheduledIds.length;
+            if (scheduledIds.length > 0) calBadge.classList.remove('hidden');
+            else calBadge.classList.add('hidden');
+        }
+
+        lucide.createIcons();
+    }
+
+    // Secondary function to render pagination controls
+    function renderPagination(totalPages) {
+        const pagContainer = document.getElementById('release-cards-pagination');
+        if (!pagContainer) return;
+        pagContainer.innerHTML = '';
+
+        if (totalPages <= 1) return;
+
+        // Custom pagination card wrap
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center justify-center gap-2 w-full pt-4 border-t border-neutral-900 mt-2';
+
+        // Prev Button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = `px-3.5 py-2 rounded-xl border border-neutral-850 text-[11px] font-bold font-mono tracking-wider transition-all bg-neutral-950/50 text-neutral-400 hover:text-white disabled:opacity-20 disabled:pointer-events-none cursor-pointer flex items-center gap-1`;
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.innerHTML = `<i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> PREV`;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderReleaseCards();
+                scrollToReleaseHeadline();
+            }
+        };
+        wrap.appendChild(prevBtn);
+
+        // Page Number buttons render with smart sliding window and ellipses
+        const pageNumbers = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            // Smart sliding window of size 5 centered on currentPage
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+
+            // Keep the window size strictly 5 if possible
+            if (currentPage <= 3) {
+                startPage = 1;
+                endPage = 5;
+            } else if (currentPage >= totalPages - 2) {
+                startPage = totalPages - 4;
+                endPage = totalPages;
+            }
+
+            // Left padding starting page elements with possible ellipsis
+            if (startPage > 1) {
+                pageNumbers.push(1);
+                if (startPage > 3) {
+                    pageNumbers.push(2);
+                    pageNumbers.push('...');
+                } else if (startPage === 3) {
+                    pageNumbers.push(2);
+                }
+            }
+
+            // Central page block
+            for (let i = startPage; i <= endPage; i++) {
+                if (!pageNumbers.includes(i)) {
+                    pageNumbers.push(i);
+                }
+            }
+
+            // Right padding ending page elements with possible ellipsis
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 2) {
+                    pageNumbers.push('...');
+                    pageNumbers.push(totalPages - 1);
+                    pageNumbers.push(totalPages);
+                } else if (endPage === totalPages - 2) {
+                    pageNumbers.push(totalPages - 1);
+                    pageNumbers.push(totalPages);
+                } else if (endPage === totalPages - 1) {
+                    pageNumbers.push(totalPages);
+                }
+            }
+        }
+
+        // Generate DOM elements for pages
+        pageNumbers.forEach(p => {
+            if (p === '...') {
+                const dotSpan = document.createElement('span');
+                dotSpan.className = 'w-9 h-9 text-[11px] font-mono text-neutral-500 flex items-center justify-center select-none';
+                dotSpan.innerText = '...';
+                wrap.appendChild(dotSpan);
+            } else {
+                const pageBtn = document.createElement('button');
+                const isActive = currentPage === p;
+                pageBtn.className = `w-9 h-9 rounded-xl border text-[11px] font-mono font-bold tracking-wider transition-all flex items-center justify-center cursor-pointer ${isActive ? 'bg-red-650/10 border-red-650 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'bg-neutral-950/30 border-neutral-900 text-neutral-400 hover:text-white'}`;
+                pageBtn.innerText = p;
+                pageBtn.onclick = () => {
+                    currentPage = p;
+                    renderReleaseCards();
+                    scrollToReleaseHeadline();
+                };
+                wrap.appendChild(pageBtn);
+            }
+        });
+
+        // Next Button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = `px-3.5 py-2 rounded-xl border border-neutral-850 text-[11px] font-bold font-mono tracking-wider transition-all bg-neutral-950/50 text-neutral-400 hover:text-white disabled:opacity-20 disabled:pointer-events-none cursor-pointer flex items-center gap-1`;
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.innerHTML = `NEXT <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>`;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderReleaseCards();
+                scrollToReleaseHeadline();
+            }
+        };
+        wrap.appendChild(nextBtn);
+
+        pagContainer.appendChild(wrap);
+    }
+
+    function scrollToReleaseHeadline() {
+        const dest = document.getElementById('search-input');
+        if (dest) dest.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setFocusedItem(item) {
+        currentFocusedItem = item;
+        if (item) {
+            displayedCalendarMonth = item.monthNum - 1;
+            displayedCalendarYear = item.year;
+        }
+        renderCalendar();
+        renderSmartphone();
+        renderReleaseCards();
+    }
+
+    function handleSearch(val) {
+        searchQuery = val;
+        currentPage = 1; // Reset page index
+        const clearBtn = document.getElementById('search-clear-btn');
+        if (val && clearBtn) {
+            clearBtn.classList.remove('hidden');
+        } else if (clearBtn) {
+            clearBtn.classList.add('hidden');
+        }
+        renderReleaseCards();
+    }
+
+    function clearSearch() {
+        const inp = document.getElementById('search-input');
+        if (inp) inp.value = '';
+        searchQuery = '';
+        currentPage = 1; // Reset page index
+        const clr = document.getElementById('search-clear-btn');
+        if (clr) clr.classList.add('hidden');
+        renderReleaseCards();
+    }
+
+    function setFilterType(type) {
+        // Normalize type robustly to support case-insensitive and prefix variants
+        let normalizedType = type;
+        if (type && typeof type === 'string') {
+            const lower = type.toLowerCase();
+            if (lower === 'all') normalizedType = 'ALL';
+            else if (lower === 'movie' || lower === 'ht_movie') normalizedType = 'Movie';
+            else if (lower === 'tv series' || lower === 'tv show' || lower === 'ht_show' || lower === 'ht_tv_show' || lower.includes('tv') || lower.includes('series') || lower.includes('show')) normalizedType = 'TV Series';
+            else if (lower === 'favorites') normalizedType = 'FAVORITES';
+        }
+        activeFilterType = normalizedType;
+        currentPage = 1; // Reset page index
+        
+        const buttons = {
+            'ALL': document.getElementById('filter-all'),
+            'Movie': document.getElementById('filter-movie'),
+            'TV Series': document.getElementById('filter-tv'),
+            'FAVORITES': document.getElementById('favs-btn')
+        };
+
+        Object.keys(buttons).forEach(key => {
+            const btn = buttons[key];
+            if (!btn) return;
+            if (key === normalizedType) {
+                if (key === 'FAVORITES') {
+                    btn.className = 'flex flex-col items-center text-center p-2 rounded-xl bg-red-950/20 border border-red-900/30 text-red-500 transition-all cursor-pointer group relative';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-xl border text-[11px] font-bold tracking-wider transition-all bg-red-600/10 border-red-650 text-red-500 cursor-pointer active-format';
+                }
+            } else {
+                if (key === 'FAVORITES') {
+                    btn.className = 'flex flex-col items-center text-center p-2 rounded-xl hover:bg-neutral-850/60 transition-all cursor-pointer group relative';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-xl border text-[11px] font-bold tracking-wider transition-all bg-neutral-950/50 border-neutral-900 text-neutral-400 hover:text-neutral-200 cursor-pointer inactive-format';
+                }
+            }
+        });
+
+        summonToast(`Filtered content list: ${normalizedType === 'ALL' ? 'All Content' : normalizedType === 'FAVORITES' ? 'Your Favorites' : normalizedType + 's'}`);
+        renderReleaseCards();
+    }
+
+    function resetFilters() {
+        searchQuery = '';
+        activeFilterType = 'ALL';
+        currentPage = 1;
+        const inp = document.getElementById('search-input');
+        if (inp) inp.value = '';
+        const clr = document.getElementById('search-clear-btn');
+        if (clr) clr.classList.add('hidden');
+        setFilterType('ALL');
+    }
+
+    function toggleFavoritesFilter() {
+        if (favoritedIds.length === 0) {
+            summonToast("No items added to favorites listing yet.");
+            return;
+        }
+        setFilterType('FAVORITES');
+    }
+
+    // Toggle Favorite Action: Local variables + WordPress ajax synchronization
+    function toggleFavoriteItem(id) {
+        const idx = favoritedIds.indexOf(id);
+        const itemObj = SCHEDULE_ITEMS.find(f => f.id === id);
+        if (!itemObj) return;
+
+        if (idx > -1) {
+            favoritedIds.splice(idx, 1);
+            summonToast(`Removed "${itemObj.title}" from favorites.`);
+        } else {
+            favoritedIds.push(id);
+            summonToast(`Added "${itemObj.title}" to favorites!`);
+        }
+        
+        localStorage.setItem('standalone_fav', JSON.stringify(favoritedIds));
+        
+        // Dynamic WordPress Cookie/DB Sync using jQuery AJAX
+        if (typeof jQuery !== 'undefined' && itemObj.wp_id) {
+            jQuery.post("<?php echo admin_url('admin-ajax.php'); ?>", {
+                action: "insom_v3_toggle_fav",
+                post_id: itemObj.wp_id
+            }, function(response) {
+                // DB success feedback if needed
+            });
+        }
+        
+        renderReleaseCards();
+    }
+
+    function toggleScheduleItem(id) {
+        const idx = scheduledIds.indexOf(id);
+        const itemObj = SCHEDULE_ITEMS.find(f => f.id === id);
+        if (!itemObj) return;
+
+        if (idx > -1) {
+            scheduledIds.splice(idx, 1);
+            summonToast(`Removed "${itemObj.title}" from personal planner.`);
+        } else {
+            scheduledIds.push(id);
+            summonToast(`Scheduled "${itemObj.title}" to your planners!`);
+        }
+        
+        localStorage.setItem('standalone_scheduled', JSON.stringify(scheduledIds));
+        renderReleaseCards();
+    }
+
+    // 6. Sidebar Planner Drawer Logic
+    function toggleCalendarPanel() {
+        const drawer = document.getElementById('calendar-drawer');
+        const innerBoard = document.getElementById('calendar-drawer-board');
+        if (!drawer || !innerBoard) return;
+
+        if (drawer.classList.contains('hidden')) {
+            populateDrawerList();
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                innerBoard.classList.remove('translate-x-full');
+            }, 10);
+        } else {
+            innerBoard.classList.add('translate-x-full');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300);
+        }
+    }
+
+    function populateDrawerList() {
+        const list = document.getElementById('drawer-items-list');
+        const dIndicator = document.getElementById('drawer-total-indicator');
+        if (!list || !dIndicator) return;
+
+        list.innerHTML = '';
+        const items = SCHEDULE_ITEMS.filter(f => scheduledIds.includes(f.id));
+        dIndicator.innerText = items.length;
+
+        if (items.length === 0) {
+            list.innerHTML = `
+                <div class="text-center py-12 px-4 border border-dashed border-neutral-800 rounded-2xl select-none">
+                    <i data-lucide="calendar" class="w-8 h-8 text-neutral-600 mx-auto mb-3"></i>
+                    <p class="text-sm font-semibold text-neutral-300">Your Planner is Empty</p>
+                    <p class="text-xs text-neutral-500 max-w-xs mx-auto mt-1 font-sans">
+                        Click "CALENDAR" on release items cards to schedule premiere tracking!
+                    </p>
+                </div>
+            `;
+            const footerEl = document.getElementById('drawer-footer-controls');
+            if (footerEl) footerEl.classList.add('opacity-50', 'pointer-events-none');
+            lucide.createIcons();
+            return;
+        }
+
+        const footerEl = document.getElementById('drawer-footer-controls');
+        if (footerEl) footerEl.classList.remove('opacity-50', 'pointer-events-none');
+
+        items.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'flex items-center gap-3 bg-neutral-900/60 border border-neutral-800 p-3.5 rounded-xl hover:border-neutral-700 transition duration-205';
+            row.innerHTML = `
+                <div class="w-1.5 h-10 rounded-full shrink-0" style="background: ${item.posterGradient}"></div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-1.5 font-mono">
+                        <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-950/40 border border-red-900/20 text-red-400">${item.type}</span>
+                        <span class="text-[10px] text-neutral-500 font-semibold">${item.displayDate}</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-white truncate mt-1 uppercase font-sans">
+                        <a href="${item.permalink || '#'}" target="_blank" onclick="event.stopPropagation(); if (this.getAttribute('href') && this.getAttribute('href') !== '#') { window.open(this.getAttribute('href'), '_blank'); } return false;" class="hover:underline hover:text-red-400 transition-colors">${item.title}</a>
+                    </h4>
+                </div>
+                <button onclick="removeCalendarItem('${item.id}')" class="p-1 px-2 text-neutral-500 hover:text-red-400 rounded-lg transition shrink-0 cursor-pointer">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            `;
+            list.appendChild(row);
+        });
+
+        lucide.createIcons();
+    }
+
+    function removeCalendarItem(id) {
+        const idx = scheduledIds.indexOf(id);
+        if (idx > -1) {
+            scheduledIds.splice(idx, 1);
+            localStorage.setItem('standalone_scheduled', JSON.stringify(scheduledIds));
+            populateDrawerList();
+            renderReleaseCards();
+            summonToast("Item removed.");
+        }
+    }
+
+    function clearAllCalendarItems() {
+        if (confirm("Are you sure you want to clear your planned timeline coordinates?")) {
+            scheduledIds = [];
+            localStorage.setItem('standalone_scheduled', JSON.stringify(scheduledIds));
+            populateDrawerList();
+            renderReleaseCards();
+            summonToast("System planner cleared.");
+        }
+    }
+
+    function triggerSynchronize() {
+        const btnText = document.getElementById('sync-btn-text');
+        if (!btnText) return;
+        btnText.innerText = "SYNCHRONIZING ENGINE...";
+        
+        // Loop and build Google Calendar rendered URLs for immediate user redirection template checks
+        const activeScheduled = SCHEDULE_ITEMS.filter(f => scheduledIds.includes(f.id));
+        if (activeScheduled.length > 0) {
+            setTimeout(() => {
+                btnText.innerText = "CHANNELS BROADCASTED!";
+                summonToast("Successfully generated planner subscription nodes.");
+                
+                // Let's redirect them to the first scheduled item's template link to be incredibly helpful!
+                const firstSchedule = activeScheduled[0];
+                const calDate = firstSchedule.originalReleaseDate.replace(/-/g, '');
+                const desc = `Type: ${firstSchedule.type} | Release: ${firstSchedule.displayDate} | Synopsis: ${firstSchedule.tagline || firstSchedule.description}`;
+                const calUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(firstSchedule.title)}&dates=${calDate}/${calDate}&details=${encodeURIComponent(desc)}`;
+                
+                window.open(calUrl, '_blank');
+                
+                setTimeout(() => {
+                    btnText.innerText = "SYNC PLANNERS";
+                }, 2000);
+            }, 1200);
+        } else {
+            setTimeout(() => {
+                btnText.innerText = "ADD ITEMS FIRST!";
+                setTimeout(() => btnText.innerText = "SYNC PLANNERS", 2000);
+            }, 800);
+        }
+    }
+
+    // 7. Subscription Alert Modal Handlers
+    function openReminderModal(preselectedId = null) {
+        const modal = document.getElementById('reminder-modal');
+        const select = document.getElementById('reminder-movie-select');
+        if (!modal || !select) return;
+
+        select.innerHTML = '';
+        SCHEDULE_ITEMS.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.id;
+            opt.innerText = `${f.title} (${f.displayDate})`;
+            if (preselectedId && f.id === preselectedId) {
+                opt.selected = true;
+            } else if (!preselectedId && currentFocusedItem && f.id === currentFocusedItem.id) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+
+        modal.classList.remove('hidden');
+        document.body.classList.add('modal-prevent-scroll');
+    }
+
+    let lastRegisteredReminderMovie = null;
+    let lastRegisteredSubscriberName = '';
+    let lastRegisteredSubscriberEmail = '';
+
+    function closeReminderModal() {
+        const modal = document.getElementById('reminder-modal');
+        if (modal) modal.classList.add('hidden');
+        document.body.classList.remove('modal-prevent-scroll');
+        document.getElementById('reminder-form-container').classList.remove('hidden');
+        document.getElementById('reminder-success-container').classList.add('hidden');
+        const rc = document.getElementById('virtual-email-receipt-container');
+        if (rc) rc.classList.add('hidden');
+    }
+
+    function handleReminderSubmit(e) {
+        e.preventDefault();
+        
+        const movieSelect = document.getElementById('reminder-movie-select');
+        const subscriberName = document.getElementById('reminder-name').value;
+        const subscriberEmail = document.getElementById('reminder-email').value;
+        
+        const selectedId = movieSelect ? movieSelect.value : null;
+        const selectedMovie = SCHEDULE_ITEMS.find(f => f.id === selectedId);
+        
+        if (!selectedMovie) {
+            summonToast("Please select a valid release.");
+            return;
+        }
+
+        // Cache coordinates for instant sandbox simulation receipt view
+        lastRegisteredReminderMovie = selectedMovie;
+        lastRegisteredSubscriberName = subscriberName;
+        lastRegisteredSubscriberEmail = subscriberEmail;
+
+        // Display targeting address
+        const targetLabel = document.getElementById('success-email-target');
+        if (targetLabel) targetLabel.innerText = subscriberEmail;
+
+        document.getElementById('reminder-form-container').classList.add('hidden');
+        document.getElementById('reminder-success-container').classList.remove('hidden');
+
+        registeredRemindersCount++;
+        localStorage.setItem('standalone_reminder_count', registeredRemindersCount);
+        
+        const pip = document.getElementById('reminder-pip');
+        if (pip) pip.classList.remove('hidden');
+
+        summonToast("Awaiting secure confirmation dispatch...");
+
+        // Fire AJAX request to server-side WordPress mailer
+        if (typeof jQuery !== 'undefined' && selectedMovie.title) {
+            jQuery.post("<?php echo admin_url('admin-ajax.php'); ?>", {
+                action: "insom_v3_send_reminder",
+                email: subscriberEmail,
+                name: subscriberName,
+                movie_title: selectedMovie.title,
+                movie_type: selectedMovie.type,
+                movie_date: selectedMovie.originalReleaseDate || selectedMovie.displayDate,
+                movie_duration: selectedMovie.duration || '',
+                movie_genre: selectedMovie.genre ? selectedMovie.genre.join(', ') : '',
+                movie_rating: selectedMovie.rating || '',
+                movie_score: selectedMovie.score || '',
+                movie_director: selectedMovie.directorOrCreator || '',
+                movie_cast: selectedMovie.cast ? selectedMovie.cast.join(', ') : '',
+                movie_tagline: selectedMovie.tagline || '',
+                movie_description: selectedMovie.description || '',
+                movie_gradient: selectedMovie.posterGradient || '',
+                movie_accent: selectedMovie.accentColor || ''
+            }, function(response) {
+                if (response.success && response.data && response.data.mail_sent) {
+                    summonToast("Styled confirmation transmission dispatched!");
+                } else {
+                    summonToast("Broadcast alert stored! Local routing fallback active.");
+                }
+            }).fail(function() {
+                summonToast("Secure dispatch channel registered.");
+            });
+        }
+    }
+
+
+
+    // 8. Detailed Specs Backdrop Modals
+    function openDetailsModal(id) {
+        const modal = document.getElementById('details-modal');
+        const item = SCHEDULE_ITEMS.find(f => f.id === id);
+        if (!modal || !item) return;
+
+        const bannerEl = document.getElementById('modal-banner');
+        if (item.thumb) {
+            bannerEl.style.background = `url('${item.thumb}') center / cover no-repeat`;
+        } else {
+            bannerEl.style.background = item.posterGradient;
+        }
+        const bannerTypeEl = document.getElementById('modal-banner-type');
+        if (bannerTypeEl) {
+            bannerTypeEl.innerText = item.type;
+            if (item.type === 'Movie') {
+                bannerTypeEl.className = 'inline-block px-2.5 py-1 text-[9.5px] leading-none font-black rounded-full font-mono tracking-widest uppercase cursor-pointer select-none border movie-badge-glow';
+            } else {
+                bannerTypeEl.className = 'inline-block px-2.5 py-1 text-[9.5px] leading-none font-black rounded-full font-mono tracking-widest uppercase cursor-pointer select-none border tv-badge-glow';
+            }
+            bannerTypeEl.onclick = (e) => {
+                e.stopPropagation();
+                closeDetailsModal();
+                setFilterType(item.type);
+            };
+        }
+        const bannerTitleEl = document.getElementById('modal-banner-title');
+        if (bannerTitleEl) {
+            bannerTitleEl.innerText = item.title;
+            bannerTitleEl.href = item.permalink || '#';
+            bannerTitleEl.target = '_blank';
+            bannerTitleEl.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (item.permalink && item.permalink !== '#') {
+                    window.open(item.permalink, '_blank');
+                }
+                return false;
+            };
+        }
+        document.getElementById('modal-banner-tagline').innerText = item.tagline ? `"${item.tagline}"` : `Premiere broadcast scheduled`;
+
+        const poster = document.getElementById('modal-preview-poster');
+        if (item.thumb) {
+            poster.style.background = `url('${item.thumb}') center / cover no-repeat`;
+        } else {
+            poster.style.background = item.posterGradient;
+        }
+        document.getElementById('modal-poster-rating').innerText = item.rating;
+        document.getElementById('modal-poster-score').innerText = item.score;
+        document.getElementById('modal-poster-text-logo').innerText = item.title.split(':')[0];
+        document.getElementById('modal-poster-releasedate').innerText = `${item.displayDate}, ${item.year}`;
+
+        document.getElementById('modal-details-plot').innerHTML = item.description;
+
+        const chips = document.getElementById('modal-details-chips');
+        chips.innerHTML = `
+            <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-400 font-mono">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-red-500"></i>
+                <span>${item.duration}</span>
+            </div>
+        `;
+        item.genre.forEach(g => {
+            chips.innerHTML += `<span class="px-2.5 py-1 rounded-full bg-red-950/15 border border-red-900/30 text-xs text-red-400 select-none font-sans">${g}</span>`;
+        });
+
+        document.getElementById('modal-details-director-label').innerHTML = `
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-red-500"></i>
+            <span>${item.type === 'Movie' ? 'DIRECTOR' : 'CREATOR & SHOWRUNNER'}</span>
+        `;
+        document.getElementById('modal-details-director-val').innerText = item.directorOrCreator;
+        document.getElementById('modal-details-star-val').innerText = item.cast.join(', ');
+
+        const tBlock = document.getElementById('modal-details-trivia-block');
+        const tList = document.getElementById('modal-details-trivia-list');
+        tList.innerHTML = '';
+        if (item.trivia && item.trivia.length > 0) {
+            tBlock.classList.remove('hidden');
+            item.trivia.forEach(tr => {
+                tList.innerHTML += `<li>${tr}</li>`;
+            });
+        } else {
+            tBlock.classList.add('hidden');
+        }
+
+        const isFav = favoritedIds.includes(item.id);
+        const isSch = scheduledIds.includes(item.id);
+        const actionbar = document.getElementById('modal-actions-bar');
+        
+        // Dynamically extract the movie's unique accent color (or default to Insomniac Red)
+        const accentColor = item.accentColor || '#ef4444';
+        
+        // Add single post link out button if they want to read full WP post specs (stacked cleanly)
+        const wpLinkButton = item.permalink && item.permalink !== '#' ? `
+            <a href="${item.permalink}" target="_blank" onclick="event.stopPropagation(); window.open(this.href, '_blank'); return false;" class="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-xl border border-neutral-800 text-neutral-350 hover:bg-neutral-900 hover:text-white transition cursor-pointer text-xs transition-all duration-300 active:scale-95" title="View Full Article">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+                <span class="font-mono text-[9px] tracking-wider uppercase font-semibold">LINK</span>
+            </a>
+        ` : '';
+
+        // Stack play-trailer elegantly to avoid text wrapping or squashing on small viewports
+        actionbar.className = "flex flex-col gap-2 w-full mt-2";
+        actionbar.innerHTML = `
+            <button onclick="playTrailer('${item.trailerUrl || ''}', '${item.title.replace(/'/g, "\\'")}')" 
+                    style="background-color: ${accentColor}; border-color: ${accentColor}40; box-shadow: 0 4px 16px ${accentColor}35;" 
+                    class="w-full flex items-center justify-center gap-2 h-11 hover:brightness-110 active:scale-98 text-white rounded-xl text-xs font-black tracking-widest transition-all cursor-pointer select-none font-sans uppercase border transition-all duration-300">
+                <i data-lucide="play" class="w-4 h-4 fill-white text-white"></i>
+                <span class="font-mono">PLAY TRAILER</span>
+            </button>
+            <div class="flex gap-2 w-full">
+                <button onclick="toggleScheduleItem('${item.id}'); openDetailsModal('${item.id}');" class="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-xl border text-xs font-bold transition-all cursor-pointer transition-all duration-300 active:scale-95 ${isSch ? 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300' : 'bg-neutral-900 border-neutral-800 text-neutral-200 hover:border-neutral-700 hover:bg-neutral-845'}" title="Add to Planner">
+                    <i data-lucide="calendar" class="w-4 h-4 ${isSch ? 'fill-emerald-400' : ''}"></i>
+                    <span class="sm:hidden font-mono text-[9px] tracking-wider uppercase">${isSch ? 'ADDED' : 'PLAN'}</span>
+                </button>
+                <button onclick="toggleFavoriteItem('${item.id}'); openDetailsModal('${item.id}');" class="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-xl border transition-all cursor-pointer transition-all duration-300 active:scale-95 ${isFav ? 'bg-red-650/20 border-red-500/50 text-red-450 font-bold' : 'bg-neutral-900 border-neutral-810 text-neutral-450 hover:text-white hover:bg-neutral-850'}" title="Favorite">
+                    <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-red-500 text-red-550' : ''}"></i>
+                    <span class="sm:hidden font-mono text-[9px] tracking-wider uppercase">FAV</span>
+                </button>
+                ${wpLinkButton}
+            </div>
+        `;
+
+        modal.classList.remove('hidden');
+        document.body.classList.add('modal-prevent-scroll');
+        lucide.createIcons();
+    }
+
+    function closeDetailsModal() {
+        const modal = document.getElementById('details-modal');
+        if (modal) modal.classList.add('hidden');
+        document.body.classList.remove('modal-prevent-scroll');
+    }
+
+    function playTrailer(url, title) {
+        if (!url) {
+            summonToast("Trailer preview is currently not available for this release.");
+            return;
+        }
+        const container = document.getElementById('trailer-video-container');
+        if (!container) return;
+        
+        let embedUrl = getTrailerEmbedUrl(url);
+        container.innerHTML = `<iframe class="w-full h-full rounded-2xl" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        
+        const trailerModal = document.getElementById('trailer-modal');
+        if (trailerModal) trailerModal.classList.remove('hidden');
+        document.body.classList.add('modal-prevent-scroll');
+        
+        summonToast(`Channeling cinematic stream channel for "${title}"...`);
+    }
+
+    function closeTrailerModal() {
+        const trailerModal = document.getElementById('trailer-modal');
+        if (trailerModal) trailerModal.classList.add('hidden');
+        
+        const container = document.getElementById('trailer-video-container');
+        if (container) container.innerHTML = '';
+        
+        const detailsModal = document.getElementById('details-modal');
+        if (detailsModal && detailsModal.classList.contains('hidden')) {
+            document.body.classList.remove('modal-prevent-scroll');
+        }
+    }
+
+    function getTrailerEmbedUrl(url) {
+        if (!url) return '';
+        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        let match = url.match(regExp);
+        if (match && match[2].length == 11) {
+            return 'https://www.youtube.com/embed/' + match[2] + '?autoplay=1&rel=0';
+        }
+        let vimeoReg = /vimeo\.com\/(?:video\/)?([0-9]+)/;
+        let vimeoMatch = url.match(vimeoReg);
+        if (vimeoMatch && vimeoMatch[1]) {
+            return 'https://player.vimeo.com/video/' + vimeoMatch[1] + '?autoplay=1';
+        }
+        return url;
+    }
+
+    // 9. Status Notifying Toast Controllers
+    function summonToast(message) {
+        const toast = document.getElementById('system-toast');
+        const text = document.getElementById('toast-text-msg');
+        if (!toast || !text) return;
+        
+        text.innerText = message;
+        toast.classList.remove('hidden');
+        toast.className = toast.className.replace(' toast-anim', '') + ' toast-anim';
+
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            dismissToast();
+        }, 4000);
+    }
+
+    function dismissToast() {
+        const toast = document.getElementById('system-toast');
+        if (toast) toast.classList.add('hidden');
+    }
+
+    function scrollToCalendar() {
+        summonToast("Retrieving Desk Calendar coordinate alignments...");
+        const dest = document.getElementById('desk-calendar-container');
+        if (dest) dest.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    let appInitialized = false;
+    function initAll() {
+        if (appInitialized) return;
+        appInitialized = true;
+        renderCalendar();
+        renderSmartphone();
+        renderReleaseCards();
+        lucide.createIcons();
+        
+        // Reveal the application template after compiling components to avoid Flash of Unstyled Content (FOUC)
+        const app = document.getElementById('insom-cinematic-app-wrapper');
+        if (app) {
+            app.style.opacity = '1';
+        }
+    }
+
+    // Initialize application frames sequentially as soon as the DOM structures form
+    document.addEventListener('DOMContentLoaded', () => {
+        // Give a minor delay to let the dynamic Tailwind CSS client CDN parse and compile classes
+        setTimeout(initAll, 50);
+    });
+
+    // Fallback trigger to ensure initialization occurs regardless of document load bounds
+    window.addEventListener('load', () => {
+        initAll();
+    });
+</script>
+<?php
+// Retrieve the dynamic WordPress site footer
+get_footer();
+?>
